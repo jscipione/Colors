@@ -1,0 +1,32 @@
+SubDir HAIKU_TOP src apps colors ;
+
+SetSubDirSupportedPlatformsBeOSCompatible ;
+
+UsePrivateHeaders interface shared ;
+
+AddResources Colors! : Pipettes.rsrc ;
+
+Application Colors! :
+	BackgroundView.cpp
+	ColorField.cpp
+	ColorPickerView.cpp
+	ColorPreview.cpp
+	ColorsApplication.cpp
+	ColorSlider.cpp
+	ColorsWindow.cpp
+	ColorWell.cpp
+	ColorWellsView.cpp
+	convert_rgb_hsv.cpp
+	EyeDropper.cpp
+	ForeBackSelector.cpp
+	: $(TARGET_LIBSTDC++) $(HAIKU_LOCALE_LIBS) be
+	: Colors.rdef
+;
+
+DoCatalogs Colors! :
+    x-vnd.Haiku-Colors!
+    :
+	ColorPickerView.cpp
+	ColorsApplication.cpp
+	ColorsWindow.cpp
+;
