@@ -14,7 +14,6 @@
 
 #include <Alert.h>
 #include <Application.h>
-#include <Catalog.h>
 #include <GroupLayout.h>
 #include <MenuItem.h>
 #include <Message.h>
@@ -24,13 +23,10 @@
 #include "ColorPickerView.h"
 #include "ColorWellsView.h"
 
-#undef B_TRANSLATION_CONTEXT
-#define B_TRANSLATION_CONTEXT "ColorsWindow"
-
 
 ColorsWindow::ColorsWindow(BRect frame)
 	:
-	BWindow(frame, B_TRANSLATE_SYSTEM_NAME("Colors!"), B_TITLED_WINDOW,
+	BWindow(frame, "Colors!", B_TITLED_WINDOW,
 		B_QUIT_ON_WINDOW_CLOSE | B_ASYNCHRONOUS_CONTROLS
 		| B_NOT_RESIZABLE | B_NOT_ZOOMABLE | B_AUTO_UPDATE_SIZE_LIMITS),
 	fColorPickerView(new ColorPickerView()),
@@ -109,23 +105,22 @@ ColorsWindow::MessageReceived(BMessage *message)
 			BPopUpMenu *menu = new BPopUpMenu("", false, false);
 			BMenuItem *item[5];
 
-			item[0] = new BMenuItem(B_TRANSLATE("Always on top"), NULL);
+			item[0] = new BMenuItem("Always on top", NULL);
 			item[0]->SetMarked(Feel() == B_FLOATING_ALL_WINDOW_FEEL);
 			menu->AddItem(item[0]);
 
-			item[1] = new BMenuItem(B_TRANSLATE("Accept first mouse click"),
-				NULL);
+			item[1] = new BMenuItem("Accept first mouse click", NULL);
 			item[1]->SetMarked(Flags() & B_WILL_ACCEPT_FIRST_CLICK);
 			menu->AddItem(item[1]);
 
-			item[2] = new BMenuItem(B_TRANSLATE("All workspaces"), NULL);
+			item[2] = new BMenuItem("All workspaces", NULL);
 			item[2]->SetMarked(Workspaces() == B_ALL_WORKSPACES);
 			menu->AddItem(item[2]);
 
 			item[3] = new BSeparatorItem();
 			menu->AddItem(item[3]);
 
-			item[4] = new BMenuItem(B_TRANSLATE("About Colors!"), NULL);
+			item[4] = new BMenuItem("About Colors!", NULL);
 			menu->AddItem(item[4]);
 
 			menu->ResizeToPreferred();
@@ -136,14 +131,14 @@ ColorsWindow::MessageReceived(BMessage *message)
 				BMessage* settings
 					= static_cast<ColorsApplication*>(be_app)->Settings();
 				if (!settings->FindBool("floating_msg_showed")) {
-					(new BAlert("Information", B_TRANSLATE(
+					(new BAlert("Information",
 						"Be aware of the following restrictions "
 						"on the 'Always on top' mode:\n"
 						"\n"
 						"· You cannot minimize the window.\n"
 						"· The window does not appear in Deskbar.\n"
-						"\nUnfortunately there is no way to change this."),
-						B_TRANSLATE("Thanks for the information")))->Go();
+						"\nUnfortunately there is no way to change this.",
+						"Thanks for the information"))->Go();
 
 					settings->AddBool("floating_msg_showed", true);
 				}

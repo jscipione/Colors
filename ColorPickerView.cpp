@@ -18,7 +18,6 @@
 #include <Application.h>
 #include <Bitmap.h>
 #include <Beep.h>
-#include <Catalog.h>
 #include <Font.h>
 #include <InterfaceDefs.h>
 #include <LayoutBuilder.h>
@@ -41,9 +40,6 @@
 
 #define round(x) (int)(x+.5)
 #define hexdec(str, offset) (int)(((str[offset]<60?str[offset]-48:(str[offset]|32)-87)<<4)|(str[offset+1]<60?str[offset+1]-48:(str[offset+1]|32)-87))
-
-#undef B_TRANSLATION_CONTEXT
-#define B_TRANSLATION_CONTEXT "ColorPickerView"
 
 
 ColorPickerView::ColorPickerView()

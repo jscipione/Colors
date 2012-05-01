@@ -44,7 +44,7 @@ class ColorSlider : public BControl {
 
 	private:
 		static	int32				UpdateThread(void *data);
-		static	inline	void		DrawColorLine( BView *view, float y,
+		static	inline	void		DrawColorLine(BView *view, float y,
 										int r, int g, int b);
 
 				color_mode			fColorMode;

@@ -17,16 +17,12 @@
 #include <string.h>
 
 #include <Alert.h>
-#include <Catalog.h>
 #include <Directory.h>
 #include <File.h>
 #include <FindDirectory.h>
 #include <Path.h>
 
 #include "ColorsWindow.h"
-
-#undef B_TRANSLATION_CONTEXT
-#define B_TRANSLATION_CONTEXT "ColorsApplication"
 
 
 static const char* kSettingsFileName = "Colors!_settings";
@@ -65,7 +61,7 @@ ColorsApplication::ReadyToRun()
 void
 ColorsApplication::AboutRequested()
 {
-	(new BAlert("About", B_TRANSLATE("Colors! 2.0\n\n"
+	(new BAlert("About", "Colors! 2.0\n\n"
 		"©2001-2008 Werner Freytag\n"
 		"©2009-2012 Haiku, Inc.\n"
 		"Colors! icon by meanwhile\n\n"
@@ -80,8 +76,8 @@ ColorsApplication::AboutRequested()
 		"color container\n"
 		"    1.5 (Sep 3, 2001) Added color containers, removed some minor "
 		"bugs, improved speed.\n"
-		"    1.0 (Aug 3, 2001) Initial release. Updates to come!"),
-		B_TRANSLATE("Close")))->Go();
+		"    1.0 (Aug 3, 2001) Initial release. Updates to come!",
+		"Close"))->Go();
 }
 
 

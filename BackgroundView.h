@@ -14,7 +14,7 @@ class BBitmap;
 
 class BackgroundView : public BView {
 	public:
-									BackgroundView( BRect frame );
+									BackgroundView(BRect frame);
 		virtual						~BackgroundView();
 
 		virtual	void				AttachedToWindow();

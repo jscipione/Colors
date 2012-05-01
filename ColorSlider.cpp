@@ -179,7 +179,7 @@ ColorSlider::UpdateThread(void* data)
 				G = round(fixedvalue1 * 255);
 				B = round(fixedvalue2 * 255);
 				for (int R = 0; R < 256; ++R)
-					DrawColorLine( view, R, R, G, B );
+					DrawColorLine(view, R, R, G, B);
 				break;
 			}
 
@@ -188,7 +188,7 @@ ColorSlider::UpdateThread(void* data)
 				R = round(fixedvalue1 * 255);
 				B = round(fixedvalue2 * 255);
 				for (int G = 0; G < 256; ++G)
-					DrawColorLine( view, G, R, G, B );
+					DrawColorLine(view, G, R, G, B);
 				break;
 			}
 			
@@ -197,7 +197,7 @@ ColorSlider::UpdateThread(void* data)
 				R = round(fixedvalue1 * 255);
 				G = round(fixedvalue2 * 255);
 				for (int B = 0; B < 256; ++B)
-					DrawColorLine( view, B, R, G, B );
+					DrawColorLine(view, B, R, G, B);
 				break;
 			}
 
@@ -338,7 +338,7 @@ void
 ColorSlider::MouseMoved(BPoint where, uint32 code, const BMessage* message)
 {
 	if (!fMouseDown || message == NULL) {
-		BView::MouseMoved( where, code, message);
+		BView::MouseMoved(where, code, message);
 		return;
 	}
 
@@ -357,7 +357,7 @@ ColorSlider::MouseUp(BPoint where)
 void
 ColorSlider::SetValue(int32 value)
 {
-	value = max_c( min_c(value, 255), 0);
+	value = max_c(min_c(value, 255), 0);
 	BControl::SetValue(value);
 
 	Update(2);
@@ -470,7 +470,7 @@ ColorSlider::SetMarkerToColor(rgb_color color)
 			break;
 		
 		case V_SELECTED:
-			SetValue( 255.0 - round(v * 255.0) );
+			SetValue(255.0 - round(v * 255.0));
 			break;
 	}
 

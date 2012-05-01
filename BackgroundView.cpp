@@ -131,7 +131,7 @@ BackgroundView::MouseDown(BPoint where)
 	if (Window()->CurrentMessage()->FindInt32("buttons")
 		== B_PRIMARY_MOUSE_BUTTON) {
 
-		rgb_color color = ColorAt( where );
+		rgb_color color = ColorAt(where);
 		BWindow *win = be_app->WindowAt(0);
 		if (win) {
 			BHandler *colorpreview;
@@ -162,7 +162,7 @@ BackgroundView::MouseMoved(BPoint where, uint32 code, const BMessage* message)
 	if (lastPosition != BPoint(-1.0, -1.0)) {
 		BRegion region(Frame());
 		region.Exclude(destRect);
-		ConstrainClippingRegion( &region );
+		ConstrainClippingRegion(&region);
 
 		DrawBitmapAsync(fBitmap,
 			copyRect.OffsetToCopy(lastPosition).
@@ -174,7 +174,7 @@ BackgroundView::MouseMoved(BPoint where, uint32 code, const BMessage* message)
 		);
 
 		region = Frame();
-		ConstrainClippingRegion( &region );
+		ConstrainClippingRegion(&region);
 	}
 
 	lastPosition = where;
@@ -208,7 +208,8 @@ BackgroundView::ColorAt(BPoint where)
 {
 	rgb_color color = { 0, 0, 0, 255 };
 
-	if (!fBitmap->Bounds().Contains( where ) ) return color;
+	if (!fBitmap->Bounds().Contains(where))
+		return color;
 
 	uchar *bits = (uchar *)fBitmap->Bits();
 
@@ -261,7 +262,7 @@ BackgroundView::ColorAt(BPoint where)
 			// D[7:0]
 		{
 			uint64 pos = (uint64)where.x + (uint64)where.y * fBitmap->BytesPerRow();
-			color = BScreen().ColorForIndex( bits[pos] );
+			color = BScreen().ColorForIndex(bits[pos]);
 			break;
 		}
 

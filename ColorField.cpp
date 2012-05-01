@@ -63,7 +63,7 @@ ColorField::ColorField(color_mode mode, float fixed_value)
 	fBgView[1]->SetHighColor(255.0, 255.0, 255.0);
 	fBgView[1]->StrokeRect(
 		COLOR_FIELD_RECT.InsetByCopy(-1.0, -1.0).OffsetToCopy(-4.0, -4.0));
-	fBgView[1]->SetHighColor( 0, 0, 0 );
+	fBgView[1]->SetHighColor(0, 0, 0);
 	fBgView[1]->StrokeRect(
 		COLOR_FIELD_RECT.InsetByCopy(1.0, 1.0).OffsetToCopy(-1.0, -1.0));
 
@@ -438,7 +438,7 @@ ColorField::UpdateThread(void *data)
 					h = 6.0 / 255 * x;
 					for (int y = 0; y<256; ++y) {
 						v = (float)y / 255.0;
-						HSV_to_RGB( h, s, v, r, g, b );
+						HSV_to_RGB(h, s, v, r, g, b);
 						DrawColorPoint(BPoint(x, 255.0 - y), round(r * 255.0),
 							round(g * 255.0), round(b * 255.0));
 					}
