@@ -1,5 +1,5 @@
 NAME=Colors
-TARGETNAME=Colors
+TARGETNAME=Colors!
 PLATFORM=Haiku
 SCM=git
 GROUP=Sources
