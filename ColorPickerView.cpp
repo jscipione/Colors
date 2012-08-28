@@ -52,11 +52,6 @@ ColorPickerView::ColorPickerView()
 	fRed(1.0),
 	fGreen(0.0),
 	fBlue(0.0),
-	fPointer0(NULL),
-	fPointer1(NULL),
-	fPointer2(NULL),
-	fMouseDown(false),
-	fMouseOffset(BPoint(0, 0)),
 	fRequiresUpdate(false)
 {
 	SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
@@ -139,8 +134,11 @@ ColorPickerView::AttachedToWindow()
 {
 	BView::AttachedToWindow();
 
-	rgb_color selected_color = { (int)(fRed * 255), (int)(fGreen * 255),
-		(int)(fBlue * 255), 255 };
+	rgb_color selected_color = {
+		(int)(fRed * 255),
+		(int)(fGreen * 255),
+		(int)(fBlue * 255), 255
+	};
 
 	fColorField->SetMarkerToColor(selected_color);
 	fColorField->SetTarget(this);
@@ -190,16 +188,28 @@ ColorPickerView::AttachedToWindow()
 void
 ColorPickerView::Draw(BRect updateRect)
 {
-	BView::Draw(updateRect);
+	// raised border
+	BRect rect(Bounds());
 
-	SetDrawingMode(B_OP_ALPHA);
-	SetHighColor(255, 255, 255, 200);
-	StrokeLine(Bounds().RightTop(), Bounds().LeftTop());
-	StrokeLine(Bounds().LeftBottom());
-	SetHighColor(0, 0, 0, 100);
-	StrokeLine(Bounds().RightBottom());
-	StrokeLine(Bounds().RightTop());
-	SetDrawingMode(B_OP_COPY);
+	if (updateRect.Intersects(rect)) {
+		rgb_color light = tint_color(LowColor(), B_LIGHTEN_MAX_TINT);
+		rgb_color shadow = tint_color(LowColor(), B_DARKEN_2_TINT);
+
+		BeginLineArray(4);
+			AddLine(BPoint(rect.left, rect.bottom),
+					BPoint(rect.left, rect.top), light);
+			AddLine(BPoint(rect.left + 1.0, rect.top),
+					BPoint(rect.right, rect.top), light);
+			AddLine(BPoint(rect.right, rect.top + 1.0),
+					BPoint(rect.right, rect.bottom), shadow);
+			AddLine(BPoint(rect.right - 1.0, rect.bottom),
+					BPoint(rect.left + 1.0, rect.bottom), shadow);
+		EndLineArray();
+
+		// exclude border from update rect
+		rect.InsetBy(1.0, 1.0);
+		updateRect = rect & updateRect;
+	}
 }
 
 
@@ -353,7 +363,6 @@ ColorPickerView::MessageReceived(BMessage *message)
 
 		default:
 			BView::MessageReceived(message);
-			break;
 	}
 }
 
