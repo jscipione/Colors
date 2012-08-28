@@ -181,7 +181,7 @@ ColorPickerView::AttachedToWindow()
 	}
 
 	SetColorMode(S_SELECTED);
-	UpdateTextControls();
+	_UpdateTextControls();
 }
 
 
@@ -223,7 +223,7 @@ ColorPickerView::MessageReceived(BMessage *message)
 			float value2;
 			value1 = message->FindFloat("value");
 			value2 = message->FindFloat("value", 1);
-			UpdateColor(-1, value1, value2);
+			_UpdateColor(-1, value1, value2);
 			fRequiresUpdate = true;
 			break;
 		}
@@ -232,7 +232,7 @@ ColorPickerView::MessageReceived(BMessage *message)
 		{
 			float value;
 			message->FindFloat("value", &value);
-			UpdateColor(value, -1, -1 );
+			_UpdateColor(value, -1, -1 );
 			fRequiresUpdate = true;
 			break;
 		}
@@ -250,7 +250,7 @@ ColorPickerView::MessageReceived(BMessage *message)
 		}
 
 		case MSG_EYEDROPPER:
-			GrabColor();
+			_GrabColor();
 			break;
 
 		case MSG_RADIOBUTTON:
@@ -417,7 +417,28 @@ void
 ColorPickerView::Pulse()
 {
 	if (fRequiresUpdate)
-		UpdateTextControls();
+		_UpdateTextControls();
+}
+
+
+// #pragma mark -
+
+
+rgb_color
+ColorPickerView::Color()
+{
+	if (fColorMode & (R_SELECTED | G_SELECTED | B_SELECTED))
+		RGB_to_HSV(fRed, fGreen, fBlue, fHue, fSat, fVal);
+	else
+		HSV_to_RGB(fRed, fGreen, fBlue, fHue, fSat, fVal);
+
+	rgb_color color;
+	color.red = (uint8)round(fRed * 255.0);
+	color.green = (uint8)round(fGreen * 255.0);
+	color.blue = (uint8)round(fBlue * 255.0);
+	color.alpha = 255;
+
+	return color;
 }
 
 
@@ -514,7 +535,7 @@ ColorPickerView::SetColorMode(color_mode mode)
 
 
 void
-ColorPickerView::GrabColor()
+ColorPickerView::_GrabColor()
 {
 	BScreen screen(Window());
 	BWindow *win = new BWindow(screen.Frame(), "", B_NO_BORDER_WINDOW_LOOK,
@@ -528,7 +549,7 @@ ColorPickerView::GrabColor()
 
 
 void
-ColorPickerView::UpdateColor(float value, float value1, float value2)
+ColorPickerView::_UpdateColor(float value, float value1, float value2)
 {
 	if (value != -1) {
 		fColorField->SetFixedValue(value);
@@ -550,7 +571,7 @@ ColorPickerView::UpdateColor(float value, float value1, float value2)
 
 
 void
-ColorPickerView::UpdateTextControls()
+ColorPickerView::_UpdateTextControls()
 {
 	Window()->DisableUpdates();
 

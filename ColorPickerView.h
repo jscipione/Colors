@@ -3,8 +3,8 @@
  * Copyright 2001-2008 Werner Freytag.
  * Distributed under the terms of the MIT License.
  */
-#ifndef _COLORPICKER_VIEW_H
-#define _COLORPICKER_VIEW_H
+#ifndef COLORPICKER_VIEW_H
+#define COLORPICKER_VIEW_H
 
 
 #include <View.h>
@@ -40,16 +40,20 @@ class ColorPickerView : public BView {
 		virtual	void				MouseUp(BPoint where);
 		virtual	void				Pulse();
 
+				rgb_color			Color();
+				color_mode			Mode() const { return fColorMode; }
 				void				SaveSettings();
-
 				void				SetColorMode(color_mode mode);
 				void				SetColor(rgb_color color);
 
 	private:
-				void				GrabColor();
-				void				UpdateColor(float value, float value1,
-										float value2);
-				void				UpdateTextControls();
+				void				_GrabColor();
+				void				_UpdateColor(float value, float value1,
+												 float value2);
+				void				_UpdateTextControls();
+				void				_SetText(BTextControl* control,
+											 const char* text,
+											 bool* requiresUpdate);
 
 				color_mode			fColorMode;
 
@@ -80,5 +84,4 @@ class ColorPickerView : public BView {
 				BTextControl*		fHexTextControl;
 };
 
-
-#endif	// _COLORPICKER_VIEW_H
+#endif	// COLORPICKER_VIEW_H
