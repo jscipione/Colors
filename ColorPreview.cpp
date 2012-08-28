@@ -44,22 +44,45 @@ ColorPreview::~ColorPreview()
 void
 ColorPreview::Draw(BRect updateRect)
 {
-	SetHighColor(128, 128, 128);
-	StrokeRect(Bounds().InsetByCopy(-1.0, -1.0).OffsetToCopy(0.0, 0.0));
-	SetHighColor(255, 255, 255);
-	StrokeRect(Bounds().InsetByCopy(-1.0, -1.0).OffsetToCopy(-2.0, -2.0));
-	SetHighColor(0, 0, 0);
-	StrokeRect(Bounds().InsetByCopy(1.0, 1.0));
+	rgb_color background = ui_color(B_PANEL_BACKGROUND_COLOR);
+	rgb_color shadow = tint_color(background, B_DARKEN_1_TINT);
+	rgb_color darkShadow = tint_color(background, B_DARKEN_3_TINT);
+	rgb_color light = tint_color(background, B_LIGHTEN_MAX_TINT);
 
-	BRect rect = Bounds().InsetByCopy(2.0, 2.0);
-	rect.bottom /= 2;
+	BRect bounds(Bounds());
+
+	BeginLineArray(4);
+	AddLine(BPoint(bounds.left, bounds.bottom),
+		BPoint(bounds.left, bounds.top), shadow);
+	AddLine(BPoint(bounds.left + 1.0, bounds.top),
+		BPoint(bounds.right, bounds.top), shadow);
+	AddLine(BPoint(bounds.right, bounds.top + 1.0),
+		BPoint(bounds.right, bounds.bottom), light);
+	AddLine(BPoint(bounds.right - 1.0, bounds.bottom),
+		BPoint(bounds.left + 1.0, bounds.bottom), light);
+	EndLineArray();
+	bounds.InsetBy(1.0, 1.0);
+
+	BeginLineArray(4);
+	AddLine(BPoint(bounds.left, bounds.bottom),
+		BPoint(bounds.left, bounds.top), darkShadow);
+	AddLine(BPoint(bounds.left + 1.0, bounds.top),
+		BPoint(bounds.right, bounds.top), darkShadow);
+	AddLine(BPoint(bounds.right, bounds.top + 1.0),
+		BPoint(bounds.right, bounds.bottom), background);
+	AddLine(BPoint(bounds.right - 1.0, bounds.bottom),
+		BPoint(bounds.left + 1.0, bounds.bottom), background);
+	EndLineArray();
+	bounds.InsetBy(1.0, 1.0);
+
+	bounds.bottom = bounds.top + bounds.Height() / 2.0;
 	SetHighColor(fColor);
-	FillRect(rect);
+	FillRect(bounds);
 
-	rect.top = rect.bottom + 1;
-	rect.bottom = Bounds().bottom - 2.0;
+	bounds.top = bounds.bottom + 1;
+	bounds.bottom = Bounds().bottom - 2.0;
 	SetHighColor(fOldColor);
-	FillRect(rect);
+	FillRect(bounds);
 }
 
 
