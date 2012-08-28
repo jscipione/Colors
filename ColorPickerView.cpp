@@ -443,27 +443,6 @@ ColorPickerView::Color()
 
 
 void
-ColorPickerView::SaveSettings()
-{
-	BMessage* settings = static_cast<ColorsApplication*>(be_app)->Settings();
-
-	settings->RemoveName("selected_color");
-	int32 int_color = ((int)(fRed * 255) << 16)
-		+ ((int)(fGreen * 255) << 8)
-		+ ((int)(fBlue * 255));
-	settings->AddInt32("selected_color", int_color);
-
-	settings->RemoveName("selected_mode");
-	for (int32 i = 0; i < 6; ++i) {
-		if (fRadioButton[i]->Value() == B_CONTROL_ON) {
-			settings->AddInt32("selected_mode", i);
-			break;
-		}
-	}
-}
-
-
-void
 ColorPickerView::SetColor(rgb_color base)
 {
 	fRed = (float)base.red / 255;
@@ -528,6 +507,27 @@ ColorPickerView::SetColorMode(color_mode mode)
 
 	fColorSlider->SetModeAndValues(fColorMode, *fPointer1, *fPointer2);
 	fColorField->SetModeAndValue(fColorMode, *fPointer0);
+}
+
+
+void
+ColorPickerView::SaveSettings()
+{
+	BMessage* settings = static_cast<ColorsApplication*>(be_app)->Settings();
+
+	settings->RemoveName("selected_color");
+	int32 int_color = ((int)(fRed * 255) << 16)
+		+ ((int)(fGreen * 255) << 8)
+		+ ((int)(fBlue * 255));
+	settings->AddInt32("selected_color", int_color);
+
+	settings->RemoveName("selected_mode");
+	for (int32 i = 0; i < 6; ++i) {
+		if (fRadioButton[i]->Value() == B_CONTROL_ON) {
+			settings->AddInt32("selected_mode", i);
+			break;
+		}
+	}
 }
 
 

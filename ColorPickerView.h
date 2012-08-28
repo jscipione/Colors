@@ -41,19 +41,21 @@ class ColorPickerView : public BView {
 		virtual	void				Pulse();
 
 				rgb_color			Color();
-				color_mode			Mode() const { return fColorMode; }
-				void				SaveSettings();
-				void				SetColorMode(color_mode mode);
 				void				SetColor(rgb_color color);
+
+				color_mode			ColorMode() const { return fColorMode; }
+				void				SetColorMode(color_mode mode);
+
+				void				SaveSettings();
 
 	private:
 				void				_GrabColor();
-				void				_UpdateColor(float value, float value1,
-												 float value2);
-				void				_UpdateTextControls();
 				void				_SetText(BTextControl* control,
 											 const char* text,
 											 bool* requiresUpdate);
+				void				_UpdateColor(float value, float value1,
+												 float value2);
+				void				_UpdateTextControls();
 
 				color_mode			fColorMode;
 
