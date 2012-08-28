@@ -232,7 +232,7 @@ ColorPickerView::MessageReceived(BMessage *message)
 		{
 			float value;
 			message->FindFloat("value", &value);
-			_UpdateColor(value, -1, -1 );
+			_UpdateColor(value, -1, -1);
 			fRequiresUpdate = true;
 			break;
 		}
