@@ -197,14 +197,14 @@ ColorPickerView::Draw(BRect updateRect)
 		rgb_color shadow = tint_color(LowColor(), B_DARKEN_2_TINT);
 
 		BeginLineArray(4);
-			AddLine(BPoint(rect.left, rect.bottom),
-					BPoint(rect.left, rect.top), light);
-			AddLine(BPoint(rect.left + 1.0, rect.top),
-					BPoint(rect.right, rect.top), light);
-			AddLine(BPoint(rect.right, rect.top + 1.0),
-					BPoint(rect.right, rect.bottom), shadow);
-			AddLine(BPoint(rect.right - 1.0, rect.bottom),
-					BPoint(rect.left + 1.0, rect.bottom), shadow);
+		AddLine(BPoint(rect.left, rect.bottom),
+			BPoint(rect.left, rect.top), light);
+		AddLine(BPoint(rect.left + 1.0, rect.top),
+			BPoint(rect.right, rect.top), light);
+		AddLine(BPoint(rect.right, rect.top + 1.0),
+			BPoint(rect.right, rect.bottom), shadow);
+		AddLine(BPoint(rect.right - 1.0, rect.bottom),
+			BPoint(rect.left + 1.0, rect.bottom), shadow);
 		EndLineArray();
 
 		// exclude border from update rect
