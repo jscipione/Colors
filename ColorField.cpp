@@ -6,6 +6,7 @@
  * Original Author:
  *		Werner Freytag <freytag@gmx.de>
  * Authors:
+ *		Stephan Aßmus <superstippi@gmx.de>
  *		John Scipione <jscipione@gmail.com>
  */
 
@@ -41,6 +42,7 @@ ColorField::ColorField(color_mode mode, float fixed_value)
 	fUpdateThread(0),
 	fUpdatePort(0)
 {
+	SetViewColor(B_TRANSPARENT_32_BIT);
 	SetExplicitMinSize(BSize(COLOR_FIELD_WIDTH, COLOR_FIELD_HEIGHT));
 	SetExplicitMaxSize(BSize(COLOR_FIELD_WIDTH, COLOR_FIELD_HEIGHT));
 
@@ -55,32 +57,13 @@ ColorField::ColorField(color_mode mode, float fixed_value)
 		fBgBitmap[i]->Unlock();
 	}
 
-	fBgBitmap[1]->Lock();
-
-	fBgView[1]->SetHighColor(128, 128, 128);
-	fBgView[1]->StrokeRect(
-		COLOR_FIELD_RECT.InsetByCopy(-1.0, -1.0).OffsetToCopy(-2.0, -2.0));
-	fBgView[1]->SetHighColor(255.0, 255.0, 255.0);
-	fBgView[1]->StrokeRect(
-		COLOR_FIELD_RECT.InsetByCopy(-1.0, -1.0).OffsetToCopy(-4.0, -4.0));
-	fBgView[1]->SetHighColor(0, 0, 0);
-	fBgView[1]->StrokeRect(
-		COLOR_FIELD_RECT.InsetByCopy(1.0, 1.0).OffsetToCopy(-1.0, -1.0));
-
-	BRegion region(
-		fBgView[1]->Bounds().InsetByCopy(2.0, 2.0).OffsetToCopy(0.0, 0.0));
-
-	fBgView[1]->ConstrainClippingRegion(&region);
-
-	fBgBitmap[1]->Unlock();
+	_DrawBorder();
 
 	fUpdatePort = create_port(100, "color field update port");
 
-	fUpdateThread = spawn_thread(&ColorField::UpdateThread,
+	fUpdateThread = spawn_thread(&ColorField::_UpdateThread,
 		"color field update thread", 10, this);
 	resume_thread(fUpdateThread);
-
-	Update(3);
 }
 
 
@@ -91,6 +74,16 @@ ColorField::~ColorField()
 
 	if (fUpdateThread)
 		kill_thread(fUpdateThread);
+
+	delete fBgBitmap[0];
+	delete fBgBitmap[1];
+}
+
+
+void
+ColorField::AttachedToWindow()
+{
+	Update(3);
 }
 
 
@@ -184,8 +177,12 @@ ColorField::PositionMarkerAt(BPoint where)
 void
 ColorField::SetModeAndValue(color_mode mode, float fixed_value)
 {
-	float R(0), G(0), B(0);
-	float H(0), S(0), V(0);
+	float R(0);
+	float G(0);
+	float B(0);
+	float H(0);
+	float S(0);
+	float V(0);
 
 	fBgBitmap[0]->Lock();
 
@@ -236,11 +233,14 @@ ColorField::SetModeAndValue(color_mode mode, float fixed_value)
 
 	rgb_color color = { round(R), round(G), round(B), 255 };
 
-	fFixedValue = fixed_value;
-	fColorMode = mode;
-
 	fBgBitmap[0]->Unlock();
-	Update(3);
+
+	if (fFixedValue != fixed_value || fColorMode != mode) {
+		fFixedValue = fixed_value;
+		fColorMode = mode;
+
+		Update(3);
+	}
 
 	SetMarkerToColor(color);
 }
@@ -249,17 +249,22 @@ ColorField::SetModeAndValue(color_mode mode, float fixed_value)
 void
 ColorField::SetFixedValue(float fixed_value)
 {
-	fFixedValue = fixed_value;
-	Update(3);
+	if (fFixedValue != fixed_value) {
+		fFixedValue = fixed_value;
+		Update(3);
+	}
 }
 
 
 void
 ColorField::SetMarkerToColor(rgb_color color)
 {
-	float h, s, v;
-	RGB_to_HSV((float)color.red / 255.0, (float)color.green / 255.0,
-		(float)color.blue / 255.0, h, s, v);
+	float h;
+	float s;
+	float v;
+
+	RGB_to_HSV((float)color.red / 255.0f, (float)color.green / 255.0f,
+		(float)color.blue / 255.0f, h, s, v);
 
 	fLastMarkerPosition = fMarkerPosition;
 
@@ -341,8 +346,62 @@ ColorField::Update(int depth)
 // #pragma mark -
 
 
+void
+ColorField::_DrawBorder()
+{
+	bool looperLocked = LockLooper();
+
+	fBgBitmap[1]->Lock();
+
+	rgb_color background = ui_color(B_PANEL_BACKGROUND_COLOR);
+	rgb_color shadow = tint_color(background, B_DARKEN_1_TINT);
+	rgb_color darkShadow = tint_color(background, B_DARKEN_3_TINT);
+	rgb_color light = tint_color(background, B_LIGHTEN_MAX_TINT);
+
+	BRect bounds(fBgView[1]->Bounds());
+	bounds.OffsetBy(-2.0, -2.0);
+	BRegion region(bounds);
+	fBgView[1]->ConstrainClippingRegion(&region);
+
+	bounds = COLOR_FIELD_RECT;
+	bounds.OffsetBy(-2.0, -2.0);
+
+	fBgView[1]->BeginLineArray(4);
+	fBgView[1]->AddLine(BPoint(bounds.left, bounds.bottom),
+		BPoint(bounds.left, bounds.top), shadow);
+	fBgView[1]->AddLine(BPoint(bounds.left + 1.0, bounds.top),
+		BPoint(bounds.right, bounds.top), shadow);
+	fBgView[1]->AddLine(BPoint(bounds.right, bounds.top + 1.0),
+		BPoint(bounds.right, bounds.bottom), light);
+	fBgView[1]->AddLine(BPoint(bounds.right - 1.0, bounds.bottom),
+		BPoint(bounds.left + 1.0, bounds.bottom), light);
+	fBgView[1]->EndLineArray();
+	bounds.InsetBy(1.0, 1.0);
+
+	fBgView[1]->BeginLineArray(4);
+	fBgView[1]->AddLine(BPoint(bounds.left, bounds.bottom),
+		BPoint(bounds.left, bounds.top), darkShadow);
+	fBgView[1]->AddLine(BPoint(bounds.left + 1.0, bounds.top),
+		BPoint(bounds.right, bounds.top), darkShadow);
+	fBgView[1]->AddLine(BPoint(bounds.right, bounds.top + 1.0),
+		BPoint(bounds.right, bounds.bottom), background);
+	fBgView[1]->AddLine(BPoint(bounds.right - 1.0, bounds.bottom),
+		BPoint(bounds.left + 1.0, bounds.bottom), background);
+	fBgView[1]->EndLineArray();
+	bounds.InsetBy(1.0, 1.0);
+
+	region.Set(bounds);
+	fBgView[1]->ConstrainClippingRegion(&region);
+
+	fBgBitmap[1]->Unlock();
+
+	if (looperLocked)
+		UnlockLooper();
+}
+
+
 int32
-ColorField::UpdateThread(void *data)
+ColorField::_UpdateThread(void *data)
 {
 	// initialization
 

@@ -3,8 +3,8 @@
  * Copyright 2001-2008 Werner Freytag.
  * Distributed under the terms of the MIT License.
  */
-#ifndef _COLOR_FIELD_H
-#define _COLOR_FIELD_H
+#ifndef COLOR_FIELD_H
+#define COLOR_FIELD_H
 
 
 #include <Control.h>
@@ -25,12 +25,17 @@ public:
 										float fixed_value);
 		virtual						~ColorField();
 
+		virtual	void				AttachedToWindow();
 		virtual	void				Draw(BRect updateRect);
+
 		virtual	status_t			Invoke(BMessage* message = NULL);
+
 		virtual	void				MouseDown(BPoint where);
 		virtual	void				MouseMoved(BPoint where, uint32 code,
 										const BMessage* message);
 		virtual	void				MouseUp(BPoint where);
+
+				bool				IsTracking() const { return fMouseDown; }
 
 				void				PositionMarkerAt(BPoint where);
 
@@ -42,10 +47,8 @@ public:
 				void				Update(int depth);
 
 private:
-	inline		void				DrawColorPoint(BPoint pt, int r, int g,
-										int b);
-
-		static	int32				UpdateThread(void *data);
+				void				_DrawBorder();
+		static	int32				_UpdateThread(void *data);
 
 				color_mode			fColorMode;
 				float				fFixedValue;
@@ -62,5 +65,6 @@ private:
 				port_id				fUpdatePort;
 };
 
+inline void DrawColorPoint(BPoint pt, int r, int g, int b);
 
-#endif // _COLOR_FIELD_H
+#endif // COLOR_FIELD_H
