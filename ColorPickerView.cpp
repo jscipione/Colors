@@ -85,12 +85,36 @@ ColorPickerView::ColorPickerView()
 	}
 
 	int32 selectedMode;
-	if (settings->FindInt32("selected_mode", &selectedMode) < B_OK) {
+	if (settings->FindInt32("selected_mode", &selectedMode) != B_OK) {
 		// default to saturation mode
 		selectedMode = 1;
 	}
 	fRadioButton[selectedMode]->SetValue(B_CONTROL_ON);
-	fColorMode = (color_mode)(1 << selectedMode);
+	switch (selectedMode) {
+		case 0:
+			SetColorMode(H_SELECTED);
+			break;
+
+		case 1:
+			SetColorMode(S_SELECTED);
+			break;
+
+		case 2:
+			SetColorMode(V_SELECTED);
+			break;
+
+		case 3:
+			SetColorMode(R_SELECTED);
+			break;
+
+		case 4:
+			SetColorMode(G_SELECTED);
+			break;
+
+		case 5:
+			SetColorMode(B_SELECTED);
+			break;
+	}
 
 	fHexTextControl = new BTextControl(NULL, "#", NULL,
 		new BMessage(MSG_HEXTEXTCONTROL));
@@ -181,7 +205,6 @@ ColorPickerView::AttachedToWindow()
 		}
 	}
 
-	SetColorMode(S_SELECTED);
 	_UpdateTextControls();
 }
 
