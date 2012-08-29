@@ -189,27 +189,28 @@ ColorPickerView::AttachedToWindow()
 void
 ColorPickerView::Draw(BRect updateRect)
 {
-	// raised border
 	BRect bounds(Bounds());
 
-	if (updateRect.Intersects(bounds)) {
-		rgb_color light = tint_color(LowColor(), B_LIGHTEN_MAX_TINT);
-		rgb_color shadow = tint_color(LowColor(), B_DARKEN_2_TINT);
+	if (!updateRect.Intersects(bounds))
+		return;
 
-		BeginLineArray(4);
-		AddLine(BPoint(bounds.left, bounds.bottom),
-			BPoint(bounds.left, bounds.top), light);
-		AddLine(BPoint(bounds.left + 1.0, bounds.top),
-			BPoint(bounds.right, bounds.top), light);
-		AddLine(BPoint(bounds.right, bounds.top + 1.0),
-			BPoint(bounds.right, bounds.bottom), shadow);
-		AddLine(BPoint(bounds.right - 1.0, bounds.bottom),
-			BPoint(bounds.left + 1.0, bounds.bottom), shadow);
-		EndLineArray();
+	rgb_color light = tint_color(LowColor(), B_LIGHTEN_MAX_TINT);
+	rgb_color shadow = tint_color(LowColor(), B_DARKEN_2_TINT);
 
-		// exclude border from update rect
-		updateRect = bounds.InsetByCopy(1.0, 1.0) & updateRect;
-	}
+	// raised border
+	BeginLineArray(4);
+	AddLine(BPoint(bounds.left, bounds.bottom),
+		BPoint(bounds.left, bounds.top), light);
+	AddLine(BPoint(bounds.left + 1.0, bounds.top),
+		BPoint(bounds.right, bounds.top), light);
+	AddLine(BPoint(bounds.right, bounds.top + 1.0),
+		BPoint(bounds.right, bounds.bottom), shadow);
+	AddLine(BPoint(bounds.right - 1.0, bounds.bottom),
+		BPoint(bounds.left + 1.0, bounds.bottom), shadow);
+	EndLineArray();
+
+	// exclude border from update rect
+	updateRect = bounds.InsetByCopy(1.0, 1.0) & updateRect;
 }
 
 
