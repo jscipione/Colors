@@ -3,8 +3,8 @@
  * Copyright 2001-2008 Werner Freytag.
  * Distributed under the terms of the MIT License.
  */
-#ifndef _COLOR_SLIDER_H
-#define _COLOR_SLIDER_H
+#ifndef COLOR_SLIDER_H
+#define COLOR_SLIDER_H
 
 
 #include <Control.h>
@@ -70,4 +70,4 @@ class ColorSlider : public BControl {
 };
 
 
-#endif	// _COLOR_SLIDER_H
+#endif	// COLOR_SLIDER_H
