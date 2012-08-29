@@ -264,30 +264,55 @@ ColorSlider::Update(int depth)
 		return;
 	}
 
+	if (Parent() == NULL)
+		return;
+
+	rgb_color background = ui_color(B_PANEL_BACKGROUND_COLOR);
+	rgb_color shadow = tint_color(background, B_DARKEN_1_TINT);
+	rgb_color darkShadow = tint_color(background, B_DARKEN_3_TINT);
+	rgb_color light = tint_color(background, B_LIGHTEN_MAX_TINT);
+
 	if (depth >= 1) {
 		fBgBitmap->Lock();
 
 		BRect bounds(-8.0, -2.0, fBgView->Bounds().right - 8.0,
 			fBgView->Bounds().bottom - 2.0);
 
-		// Edges
-		BRect rect = bounds.InsetByCopy(6.0, 0.0);
-		fBgView->SetHighColor(255, 255, 255);
-		fBgView->StrokeRect(BRect(rect.left, rect.top, rect.right,
-			rect.bottom));
-		fBgView->SetHighColor(128, 128, 128);
-		fBgView->StrokeRect(BRect(rect.left, rect.top, rect.right - 1,
-			rect.bottom - 1));
-		fBgView->SetHighColor(0, 0, 0);
-		fBgView->StrokeRect(rect.InsetByCopy(1.0, 1.0));
+		bounds.InsetBy(6.0, 0.0);
 
-		// Marker
-		fBgView->SetHighColor(ViewColor());
+		// Frame
+		fBgView->BeginLineArray(4);
+		fBgView->AddLine(BPoint(bounds.left, bounds.bottom),
+			BPoint(bounds.left, bounds.top), shadow);
+		fBgView->AddLine(BPoint(bounds.left + 1.0, bounds.top),
+			BPoint(bounds.right, bounds.top), shadow);
+		fBgView->AddLine(BPoint(bounds.right, bounds.top + 1.0),
+			BPoint(bounds.right, bounds.bottom), light);
+		fBgView->AddLine(BPoint(bounds.right - 1.0, bounds.bottom),
+			BPoint(bounds.left + 1.0, bounds.bottom), light);
+		fBgView->EndLineArray();
+		bounds.InsetBy(1.0, 1.0);
+	
+		fBgView->BeginLineArray(4);
+		fBgView->AddLine(BPoint(bounds.left, bounds.bottom),
+			BPoint(bounds.left, bounds.top), darkShadow);
+		fBgView->AddLine(BPoint(bounds.left + 1.0, bounds.top),
+			BPoint(bounds.right, bounds.top), darkShadow);
+		fBgView->AddLine(BPoint(bounds.right, bounds.top + 1.0),
+			BPoint(bounds.right, bounds.bottom), background);
+		fBgView->AddLine(BPoint(bounds.right - 1.0, bounds.bottom),
+			BPoint(bounds.left + 1.0, bounds.bottom), background);
+		fBgView->EndLineArray();
+		bounds.InsetBy(-7.0, -1.0);
+
+		// Clear the area to the left and right of the slider
+		fBgView->SetHighColor(background);
 		fBgView->FillRect(BRect(bounds.left, bounds.top, bounds.left + 5.0,
 			bounds.bottom));
 		fBgView->FillRect(BRect(bounds.right - 5.0, bounds.top, bounds.right,
 			bounds.bottom));
 
+		// Marker
 		fBgView->SetHighColor(0, 0, 0);
 		float value = Value();
 
