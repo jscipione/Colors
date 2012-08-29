@@ -61,11 +61,13 @@ ColorsApplication::ReadyToRun()
 void
 ColorsApplication::AboutRequested()
 {
-	(new BAlert("About", "Colors! 2.0\n\n"
+	(new BAlert("About", "Colors! 2.1\n\n"
 		"©2001-2008 Werner Freytag\n"
 		"©2009-2012 Haiku, Inc.\n"
 		"Colors! icon by meanwhile\n\n"
 		"History\n"
+		"    2.1 (Aug 29, 2012) Updated look of controls, slider now updates "
+		"live.\n"
 		"    2.0 (Apr 30, 2012) Layout with the Haiku layout APIs, update "
 		"the icon, add more color containers, update the interface, "
 		"improve the fore back color container control.\n"
