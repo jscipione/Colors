@@ -6,6 +6,7 @@
  * Original Author:
  *		Werner Freytag <freytag@gmx.de>
  * Authors:
+ *		Stephan Aßmus <superstippi@gmx.de>
  *		John Scipione <jscipione@gmail.com>
  */
 
