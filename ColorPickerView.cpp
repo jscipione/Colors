@@ -190,26 +190,25 @@ void
 ColorPickerView::Draw(BRect updateRect)
 {
 	// raised border
-	BRect rect(Bounds());
+	BRect bounds(Bounds());
 
-	if (updateRect.Intersects(rect)) {
+	if (updateRect.Intersects(bounds)) {
 		rgb_color light = tint_color(LowColor(), B_LIGHTEN_MAX_TINT);
 		rgb_color shadow = tint_color(LowColor(), B_DARKEN_2_TINT);
 
 		BeginLineArray(4);
-		AddLine(BPoint(rect.left, rect.bottom),
-			BPoint(rect.left, rect.top), light);
-		AddLine(BPoint(rect.left + 1.0, rect.top),
-			BPoint(rect.right, rect.top), light);
-		AddLine(BPoint(rect.right, rect.top + 1.0),
-			BPoint(rect.right, rect.bottom), shadow);
-		AddLine(BPoint(rect.right - 1.0, rect.bottom),
-			BPoint(rect.left + 1.0, rect.bottom), shadow);
+		AddLine(BPoint(bounds.left, bounds.bottom),
+			BPoint(bounds.left, bounds.top), light);
+		AddLine(BPoint(bounds.left + 1.0, bounds.top),
+			BPoint(bounds.right, bounds.top), light);
+		AddLine(BPoint(bounds.right, bounds.top + 1.0),
+			BPoint(bounds.right, bounds.bottom), shadow);
+		AddLine(BPoint(bounds.right - 1.0, bounds.bottom),
+			BPoint(bounds.left + 1.0, bounds.bottom), shadow);
 		EndLineArray();
 
 		// exclude border from update rect
-		rect.InsetBy(1.0, 1.0);
-		updateRect = rect & updateRect;
+		updateRect = bounds.InsetByCopy(1.0, 1.0) & updateRect;
 	}
 }
 
