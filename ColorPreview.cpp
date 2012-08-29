@@ -108,7 +108,7 @@ ColorPreview::MessageReceived(BMessage *message)
 		uint32 buttons;
 		GetMouse(&where, &buttons);
 
-		DragColor(where);
+		_DragColor(where);
 	} else {
 		char *nameFound;
 		type_code typeFound;
@@ -124,14 +124,14 @@ ColorPreview::MessageReceived(BMessage *message)
 			&numBytes);
 
 		BPoint where;
-		bool drop_new = false;
+		bool droppedOnNewArea = false;
 		if (message->FindPoint("_drop_point_", &where) == B_OK) {
 			ConvertFromScreen(&where);
 			if (where.y > Bounds().top + (Bounds().IntegerHeight() >> 1))
-				drop_new = true;
+				droppedOnNewArea = true;
 		}
 
-		if (drop_new)
+		if (droppedOnNewArea)
 			SetNewColor(*color);
 		else
 			SetColor(*color);
@@ -147,8 +147,8 @@ ColorPreview::MouseDown(BPoint where)
 	Window()->Activate();
 
 	fMouseDown = true;
-	fMessageRunner = new BMessageRunner(this, new BMessage(MSG_MESSAGERUNNER),
-		300000, 1);
+	fMessageRunner = new BMessageRunner(
+		this, new BMessage(MSG_MESSAGERUNNER), 300000, 1);
 
 	SetMouseEventMask(B_POINTER_EVENTS,
 		B_SUSPEND_VIEW_FOCUS | B_LOCK_WINDOW_FOCUS);
@@ -168,7 +168,7 @@ void
 ColorPreview::MouseMoved(BPoint where, uint32 code, const BMessage* message)
 {
 	if (fMouseDown)
-		DragColor(where);
+		_DragColor(where);
 }
 
 
@@ -188,7 +188,8 @@ ColorPreview::SetColor(rgb_color color)
 {
 	color.alpha = 255;
 	fColor = color;
-	Draw(Bounds());
+
+	Invalidate();
 }
 
 
@@ -197,7 +198,8 @@ ColorPreview::SetNewColor(rgb_color color)
 {
 	fColor = color;
 	fOldColor = color;
-	Draw(Bounds());
+
+	Invalidate();
 }
 
 
@@ -205,7 +207,7 @@ ColorPreview::SetNewColor(rgb_color color)
 
 
 void
-ColorPreview::DragColor(BPoint where)
+ColorPreview::_DragColor(BPoint where)
 {
 	char hexstr[7];
 	sprintf(hexstr, "#%.2X%.2X%.2X", fColor.red, fColor.green, fColor.blue);

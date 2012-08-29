@@ -35,7 +35,7 @@ class ColorPreview : public BControl {
 				void				SetNewColor(rgb_color color);
 
 	private:
-				void				DragColor(BPoint where);
+				void				_DragColor(BPoint where);
 
 				rgb_color			fColor;
 				rgb_color			fOldColor;
