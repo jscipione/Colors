@@ -53,6 +53,11 @@ ColorPickerView::ColorPickerView()
 	fRed(1.0),
 	fGreen(0.0),
 	fBlue(0.0),
+	fPointer0(NULL),
+	fPointer1(NULL),
+	fPointer2(NULL),
+	fMouseDown(false),
+	fMouseOffset(BPoint(0, 0)),
 	fRequiresUpdate(false)
 {
 	SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
