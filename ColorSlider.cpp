@@ -223,7 +223,8 @@ ColorSlider::SetOtherValues(float value1, float value2)
 	fFixedValue1 = value1;
 	fFixedValue2 = value2;
 
-	Update(2);
+	if (fColorMode != H_SELECTED)
+		Update(2);
 }
 
 
@@ -517,8 +518,8 @@ ColorSlider::_UpdateThread(void* data)
 
 			case H_SELECTED:
 			{
-				s = fixedvalue1;
-				v = fixedvalue2;
+				s = 1.0;
+				v = 1.0;
 				for (int y = 0; y < 256; ++y) {
 					HSV_to_RGB((float)y * 6.0 / 255.0, s, v, r, g, b);
 					_DrawColorLine(view, y, r * 255, g * 255, b * 255);
@@ -529,7 +530,7 @@ ColorSlider::_UpdateThread(void* data)
 			case S_SELECTED:
 			{
 				h = fixedvalue1;
-				v = fixedvalue2;
+				v = 1.0;
 				for (int y = 0; y < 256; ++y)
 				{
 					HSV_to_RGB(h, (float)y / 255, v, r, g, b);
@@ -541,7 +542,7 @@ ColorSlider::_UpdateThread(void* data)
 			case V_SELECTED:
 			{
 				h = fixedvalue1;
-				s = fixedvalue2;
+				s = 1.0;
 				for (int y = 0; y < 256; ++y) {
 					HSV_to_RGB(h, s, (float)y / 255, r, g, b);
 					_DrawColorLine(view, y, r * 255, g * 255, b * 255);
