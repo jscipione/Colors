@@ -13,6 +13,7 @@ Usage
 Find a color with Colors! When you have found the one you want, use drag & drop to copy it to your preferred application.
 
 Version History
+    2.1 (Aug 29, 2012) Updated look of controls, slider now updates live.
     2.0 (Apr 30, 2012) Layout with the Haiku layout APIs, update the icon, add more color containers, update the interface, improve the fore back color container control.
     1.6 (Sep 11, 2001): Added the eye-dropper to pick a color from anywhere on the desktop. Added a popup menu with some useful window specific settings
     1.5.1 (Sep 5, 2001): Removed (again) some minor bugs, improved the text color container
