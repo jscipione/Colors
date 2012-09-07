@@ -27,6 +27,7 @@
 #include <Resources.h>
 #include <Screen.h>
 #include <Size.h>
+#include <StringView.h>
 #include <TextControl.h>
 #include <Window.h>
 
