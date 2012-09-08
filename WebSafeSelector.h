@@ -6,14 +6,14 @@
 #define WEB_SAFE_SELECTOR_H
 
 
-#include <View.h>
+#include <Control.h>
 
 #define MSG_WEBSAFE 'WebS'
 
 
-class WebSafeSelector : public BView {
+class WebSafeSelector : public BControl {
 	public:
-									WebSafeSelector(BRect frame);
+									WebSafeSelector();
 		virtual						~WebSafeSelector();
 
 		virtual	void				Draw(BRect updateRect);

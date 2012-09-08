@@ -79,7 +79,7 @@ ColorPickerView::ColorPickerView()
 	fColorSlider = new ColorSlider(fColorMode, fHue, fVal);
 	fColorPreview = new ColorPreview();
 	fEyeDropper = new EyeDropper();
-	fWebSafeSelector = new WebSafeSelector(BRect(0, 0, 20, 20));
+	fWebSafeSelector = new WebSafeSelector();
 
 	const char *title[] = { "H", "S", "V", "R", "G", "B" };
 
@@ -200,6 +200,8 @@ ColorPickerView::AttachedToWindow()
 	fColorPreview->SetTarget(this);
 
 	fEyeDropper->SetTarget(this);
+
+	fWebSafeSelector->SetColor(selected_color);
 
 	for (int32 i = 0; i < 6; ++i) {
 		fRadioButton[i]->SetFontSize(9.0);
