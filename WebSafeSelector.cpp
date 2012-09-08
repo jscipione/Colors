@@ -14,6 +14,9 @@
 #include <Polygon.h>
 #include <Window.h>
 
+#define INDICATOR_RECT BRect(4.0, 0.0, 16.0, 12.0)
+#define COLOR_RECT BRect(0.0, 18.0, 18.0, 36.0)
+
 
 rgb_color
 round_to_nearest_websafe_color(rgb_color color)
@@ -41,83 +44,87 @@ WebSafeSelector::~WebSafeSelector()
 void
 WebSafeSelector::Draw(BRect updateRect)
 {
-	rgb_color background = ui_color(B_PANEL_BACKGROUND_COLOR);
-	rgb_color shadow = tint_color(background, B_DARKEN_1_TINT);
-	rgb_color darkShadow = tint_color(background, B_DARKEN_3_TINT);
-	rgb_color light = tint_color(background, B_LIGHTEN_MAX_TINT);
+	if (updateRect.Intersects(COLOR_RECT)) {
+		rgb_color background = ui_color(B_PANEL_BACKGROUND_COLOR);
+		rgb_color shadow = tint_color(background, B_DARKEN_1_TINT);
+		rgb_color darkShadow = tint_color(background, B_DARKEN_3_TINT);
+		rgb_color light = tint_color(background, B_LIGHTEN_MAX_TINT);
 
-	BRect bounds = Bounds();
-	bounds.top = bounds.bottom - bounds.right;
-	bounds.InsetBy(5.0, 5.0);
+		BRect bounds = COLOR_RECT;
 
-	BeginLineArray(4);
-	AddLine(BPoint(bounds.left, bounds.bottom),
-		BPoint(bounds.left, bounds.top), shadow);
-	AddLine(BPoint(bounds.left + 1.0, bounds.top),
-		BPoint(bounds.right, bounds.top), shadow);
-	AddLine(BPoint(bounds.right, bounds.top + 1.0),
-		BPoint(bounds.right, bounds.bottom), light);
-	AddLine(BPoint(bounds.right - 1.0, bounds.bottom),
-		BPoint(bounds.left + 1.0, bounds.bottom), light);
-	EndLineArray();
-	bounds.InsetBy(1.0, 1.0);
+		BeginLineArray(4);
+		AddLine(BPoint(bounds.left, bounds.bottom),
+			BPoint(bounds.left, bounds.top), shadow);
+		AddLine(BPoint(bounds.left + 1.0, bounds.top),
+			BPoint(bounds.right, bounds.top), shadow);
+		AddLine(BPoint(bounds.right, bounds.top + 1.0),
+			BPoint(bounds.right, bounds.bottom), light);
+		AddLine(BPoint(bounds.right - 1.0, bounds.bottom),
+			BPoint(bounds.left + 1.0, bounds.bottom), light);
+		EndLineArray();
+		bounds.InsetBy(1.0, 1.0);
 
-	BeginLineArray(4);
-	AddLine(BPoint(bounds.left, bounds.bottom),
-		BPoint(bounds.left, bounds.top), darkShadow);
-	AddLine(BPoint(bounds.left + 1.0, bounds.top),
-		BPoint(bounds.right, bounds.top), darkShadow);
-	AddLine(BPoint(bounds.right, bounds.top + 1.0),
-		BPoint(bounds.right, bounds.bottom), background);
-	AddLine(BPoint(bounds.right - 1.0, bounds.bottom),
-		BPoint(bounds.left + 1.0, bounds.bottom), background);
-	EndLineArray();
-	bounds.InsetBy(1.0, 1.0);
+		BeginLineArray(4);
+		AddLine(BPoint(bounds.left, bounds.bottom),
+			BPoint(bounds.left, bounds.top), darkShadow);
+		AddLine(BPoint(bounds.left + 1.0, bounds.top),
+			BPoint(bounds.right, bounds.top), darkShadow);
+		AddLine(BPoint(bounds.right, bounds.top + 1.0),
+			BPoint(bounds.right, bounds.bottom), background);
+		AddLine(BPoint(bounds.right - 1.0, bounds.bottom),
+			BPoint(bounds.left + 1.0, bounds.bottom), background);
+		EndLineArray();
+		bounds.InsetBy(1.0, 1.0);
 
-	rgb_color black = (rgb_color){ 0, 0, 0 };
-	rgb_color medium = tint_color(black, B_LIGHTEN_2_TINT);
-	rgb_color dark = tint_color(black, B_LIGHTEN_1_TINT);
+		SetHighColor(fColor);
+		FillRect(bounds);
+	}
 
-	SetHighColor(fColor);
-	FillRect(bounds);
-	bounds.OffsetBy(1, -20);
+	if (updateRect.Intersects(INDICATOR_RECT)) {
+		rgb_color black = (rgb_color){ 0, 0, 0 };
+		rgb_color light = tint_color(black, B_LIGHTEN_MAX_TINT);
+		rgb_color medium = tint_color(black, B_LIGHTEN_2_TINT);
+		rgb_color dark = tint_color(black, B_LIGHTEN_1_TINT);
 
-	BPoint pointList[4];
-	pointList[0] = bounds.LeftTop() + BPoint(0, 3);
-	pointList[1] = bounds.LeftTop() + BPoint(0, 9);
-	pointList[2] = bounds.LeftTop() + BPoint(5, 12);
-	pointList[3] = bounds.LeftTop() + BPoint(5, 6);
+		BRect bounds = INDICATOR_RECT;
 
-	BPolygon* rhombus1 = new BPolygon(pointList, 4);
-	SetHighColor(dark);
-	FillPolygon(rhombus1);
-	SetHighColor(black);
-	StrokePolygon(rhombus1);
-	delete rhombus1;
+		BPoint pointList[4];
+		pointList[0] = bounds.LeftTop() + BPoint(0, 3);
+		pointList[1] = bounds.LeftTop() + BPoint(0, 9);
+		pointList[2] = bounds.LeftTop() + BPoint(5, 12);
+		pointList[3] = bounds.LeftTop() + BPoint(5, 6);
 
-	pointList[0] = bounds.LeftTop() + BPoint(5, 6);
-	pointList[1] = bounds.LeftTop() + BPoint(5, 12);
-	pointList[2] = bounds.LeftTop() + BPoint(10, 9);
-	pointList[3] = bounds.LeftTop() + BPoint(10, 3);
+		BPolygon* rhombus1 = new BPolygon(pointList, 4);
+		SetHighColor(dark);
+		FillPolygon(rhombus1);
+		SetHighColor(black);
+		StrokePolygon(rhombus1);
+		delete rhombus1;
 
-	BPolygon* rhombus2 = new BPolygon(pointList, 4);
-	SetHighColor(light);
-	FillPolygon(rhombus2);
-	SetHighColor(black);
-	StrokePolygon(rhombus2);
-	delete rhombus2;
+		pointList[0] = bounds.LeftTop() + BPoint(5, 6);
+		pointList[1] = bounds.LeftTop() + BPoint(5, 12);
+		pointList[2] = bounds.LeftTop() + BPoint(10, 9);
+		pointList[3] = bounds.LeftTop() + BPoint(10, 3);
 
-	pointList[0] = bounds.LeftTop() + BPoint(0, 3);
-	pointList[1] = bounds.LeftTop() + BPoint(5, 6);
-	pointList[2] = bounds.LeftTop() + BPoint(10, 3);
-	pointList[3] = bounds.LeftTop() + BPoint(5, 0);
+		BPolygon* rhombus2 = new BPolygon(pointList, 4);
+		SetHighColor(light);
+		FillPolygon(rhombus2);
+		SetHighColor(black);
+		StrokePolygon(rhombus2);
+		delete rhombus2;
 
-	BPolygon* rhombus3 = new BPolygon(pointList, 4);
-	SetHighColor(medium);
-	FillPolygon(rhombus3);
-	SetHighColor(black);
-	StrokePolygon(rhombus3);
-	delete rhombus3;
+		pointList[0] = bounds.LeftTop() + BPoint(0, 3);
+		pointList[1] = bounds.LeftTop() + BPoint(5, 6);
+		pointList[2] = bounds.LeftTop() + BPoint(10, 3);
+		pointList[3] = bounds.LeftTop() + BPoint(5, 0);
+
+		BPolygon* rhombus3 = new BPolygon(pointList, 4);
+		SetHighColor(medium);
+		FillPolygon(rhombus3);
+		SetHighColor(black);
+		StrokePolygon(rhombus3);
+		delete rhombus3;
+	}
 }
 
 
@@ -186,5 +193,5 @@ WebSafeSelector::SetColor(rgb_color color)
 	color.alpha = 255;
 	fColor = color;
 	if (Window() && !IsHidden())
-		Draw(Bounds());
+		Draw(COLOR_RECT);
 }
