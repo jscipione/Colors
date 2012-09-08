@@ -86,7 +86,7 @@ WebSafeSelector::Draw(BRect updateRect)
 	pointList[0] = bounds.LeftTop() + BPoint(0, 3);
 	pointList[1] = bounds.LeftTop() + BPoint(0, 9);
 	pointList[2] = bounds.LeftTop() + BPoint(5, 12);
-	pointList[3] = bounds.LeftTop() + BPoint(5, 5);
+	pointList[3] = bounds.LeftTop() + BPoint(5, 6);
 
 	BPolygon* rhombus1 = new BPolygon(pointList, 4);
 	SetHighColor(dark);
@@ -95,7 +95,7 @@ WebSafeSelector::Draw(BRect updateRect)
 	StrokePolygon(rhombus1);
 	delete rhombus1;
 
-	pointList[0] = bounds.LeftTop() + BPoint(5, 5);
+	pointList[0] = bounds.LeftTop() + BPoint(5, 6);
 	pointList[1] = bounds.LeftTop() + BPoint(5, 12);
 	pointList[2] = bounds.LeftTop() + BPoint(10, 9);
 	pointList[3] = bounds.LeftTop() + BPoint(10, 3);
@@ -108,7 +108,7 @@ WebSafeSelector::Draw(BRect updateRect)
 	delete rhombus2;
 
 	pointList[0] = bounds.LeftTop() + BPoint(0, 3);
-	pointList[1] = bounds.LeftTop() + BPoint(5, 5);
+	pointList[1] = bounds.LeftTop() + BPoint(5, 6);
 	pointList[2] = bounds.LeftTop() + BPoint(10, 3);
 	pointList[3] = bounds.LeftTop() + BPoint(5, 0);
 
@@ -166,16 +166,25 @@ WebSafeSelector::SetColor(long int c)
 	color.green = (c >> 8) & 255;
 	color.blue  = c & 255;
 
-	SetColor(round_to_nearest_websafe_color(color));
+	SetColor(color);
 }
 
 
 void
 WebSafeSelector::SetColor(rgb_color color)
 {
+	
+	if (!IsHidden() &&
+			(color.red % 0x33) == 0 &&
+			(color.green % 0x33) == 0 &&
+			(color.blue % 0x33) == 0) {
+		Hide();
+	} else if (IsHidden())
+		Show();
+
 	color = round_to_nearest_websafe_color(color);
 	color.alpha = 255;
 	fColor = color;
-	if (Window())
+	if (Window() && !IsHidden())
 		Draw(Bounds());
 }
