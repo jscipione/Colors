@@ -20,6 +20,7 @@ class ColorField;
 class ColorSlider;
 class ColorPreview;
 class EyeDropper;
+class WebSafeView;
 
 class BRadioButton;
 class BTextControl;
@@ -80,6 +81,7 @@ class ColorPickerView : public BView {
 				ColorSlider*		fColorSlider;
 				ColorPreview*		fColorPreview;
 				EyeDropper*			fEyeDropper;
+				WebSafeView*		fWebSafe;
 
 				BRadioButton*		fRadioButton[6];
 				BTextControl*		fTextControl[6];

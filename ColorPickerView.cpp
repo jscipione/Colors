@@ -39,6 +39,7 @@
 #include "ColorsWindow.h"
 #include "convert_rgb_hsv.h"
 #include "EyeDropper.h"
+#include "WebSafeView.h"
 
 #define round(x) (int)(x+.5)
 #define hexdec(str, offset) (int)(((str[offset]<60?str[offset]-48:(str[offset]|32)-87)<<4)|(str[offset+1]<60?str[offset+1]-48:(str[offset+1]|32)-87))
@@ -78,6 +79,7 @@ ColorPickerView::ColorPickerView()
 	fColorSlider = new ColorSlider(fColorMode, fHue, fVal);
 	fColorPreview = new ColorPreview();
 	fEyeDropper = new EyeDropper();
+	fWebSafe = new WebSafeView();
 
 	const char *title[] = { "H", "S", "V", "R", "G", "B" };
 
