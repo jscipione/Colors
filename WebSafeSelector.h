@@ -17,6 +17,7 @@ class WebSafeSelector : public BControl {
 		virtual						~WebSafeSelector();
 
 		virtual	void				Draw(BRect updateRect);
+		virtual	status_t			Invoke(BMessage* mesesage = NULL);
 		virtual	void				MouseDown(BPoint where);
 
 				rgb_color			GetColor() const;

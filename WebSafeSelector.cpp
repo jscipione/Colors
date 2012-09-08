@@ -85,51 +85,69 @@ WebSafeSelector::Draw(BRect updateRect)
 	BPoint pointList[4];
 	pointList[0] = bounds.LeftTop() + BPoint(0, 3);
 	pointList[1] = bounds.LeftTop() + BPoint(0, 9);
-	pointList[2] = bounds.LeftTop() + BPoint(5, 11);
+	pointList[2] = bounds.LeftTop() + BPoint(5, 12);
 	pointList[3] = bounds.LeftTop() + BPoint(5, 5);
 
 	BPolygon* rhombus1 = new BPolygon(pointList, 4);
-	SetHighColor(black);
-	StrokePolygon(rhombus1);
 	SetHighColor(dark);
 	FillPolygon(rhombus1);
+	SetHighColor(black);
+	StrokePolygon(rhombus1);
 	delete rhombus1;
 
 	pointList[0] = bounds.LeftTop() + BPoint(5, 5);
-	pointList[1] = bounds.LeftTop() + BPoint(5, 11);
+	pointList[1] = bounds.LeftTop() + BPoint(5, 12);
 	pointList[2] = bounds.LeftTop() + BPoint(10, 9);
 	pointList[3] = bounds.LeftTop() + BPoint(10, 3);
 
 	BPolygon* rhombus2 = new BPolygon(pointList, 4);
-	SetHighColor(black);
-	StrokePolygon(rhombus2);
 	SetHighColor(light);
 	FillPolygon(rhombus2);
+	SetHighColor(black);
+	StrokePolygon(rhombus2);
 	delete rhombus2;
 
-	pointList[0] = bounds.LeftTop() + BPoint(1, 3);
+	pointList[0] = bounds.LeftTop() + BPoint(0, 3);
 	pointList[1] = bounds.LeftTop() + BPoint(5, 5);
-	pointList[2] = bounds.LeftTop() + BPoint(9, 3);
-	pointList[3] = bounds.LeftTop() + BPoint(5, 1);
+	pointList[2] = bounds.LeftTop() + BPoint(10, 3);
+	pointList[3] = bounds.LeftTop() + BPoint(5, 0);
 
 	BPolygon* rhombus3 = new BPolygon(pointList, 4);
-	SetHighColor(black);
-	StrokePolygon(rhombus3);
 	SetHighColor(medium);
 	FillPolygon(rhombus3);
+	SetHighColor(black);
+	StrokePolygon(rhombus3);
 	delete rhombus3;
+}
+
+
+status_t
+WebSafeSelector::Invoke(BMessage *message)
+{
+	if (message == NULL)
+		message = Message();
+
+	message->RemoveName("selected_color");
+	message->AddData("selected_color", B_RGB_COLOR_TYPE, &fColor,
+		sizeof(fColor));
+
+	return BControl::Invoke(message);
 }
 
 
 void
 WebSafeSelector::MouseDown(BPoint where)
 {
+	Window()->Activate();
+
 	BMessage message;
 	message.AddData("RGBColor", B_RGB_COLOR_TYPE, &fColor, sizeof(fColor));
 
 	BHandler* colorpreview;
 	if ((colorpreview = (BHandler*)Window()->FindView("color preview")))
 		Window()->PostMessage(&message, colorpreview);
+
+	Invoke();
 }
 
 

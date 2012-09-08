@@ -202,6 +202,7 @@ ColorPickerView::AttachedToWindow()
 	fEyeDropper->SetTarget(this);
 
 	fWebSafeSelector->SetColor(selected_color);
+	fWebSafeSelector->SetTarget(this);
 
 	for (int32 i = 0; i < 6; ++i) {
 		fRadioButton[i]->SetFontSize(9.0);
@@ -509,6 +510,8 @@ ColorPickerView::SetColor(rgb_color base)
 
 	fColorPreview->SetColor(base);
 
+	fWebSafeSelector->SetColor(base);
+
 	fRequiresUpdate = true;
 }
 
@@ -617,7 +620,9 @@ ColorPickerView::_UpdateColor(float value, float value1, float value2)
 
 	rgb_color base = { (int)(fRed * 255), (int)(fGreen * 255),
 		(int)(fBlue * 255), 255 };
+
 	fColorPreview->SetColor(base);
+	fWebSafeSelector->SetColor(base);
 }
 
 
