@@ -39,7 +39,7 @@
 #include "ColorsWindow.h"
 #include "convert_rgb_hsv.h"
 #include "EyeDropper.h"
-#include "WebSafeView.h"
+#include "WebSafeSelector.h"
 
 #define round(x) (int)(x+.5)
 #define hexdec(str, offset) (int)(((str[offset]<60?str[offset]-48:(str[offset]|32)-87)<<4)|(str[offset+1]<60?str[offset+1]-48:(str[offset+1]|32)-87))
@@ -79,7 +79,7 @@ ColorPickerView::ColorPickerView()
 	fColorSlider = new ColorSlider(fColorMode, fHue, fVal);
 	fColorPreview = new ColorPreview();
 	fEyeDropper = new EyeDropper();
-	fWebSafe = new WebSafeView();
+	fWebSafeSelector = new WebSafeSelector(BRect(0, 0, 20, 20));
 
 	const char *title[] = { "H", "S", "V", "R", "G", "B" };
 
@@ -134,10 +134,13 @@ ColorPickerView::ColorPickerView()
 			.Add(fColorField)
 			.Add(fColorSlider)
 			.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)
-				.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)
-					.Add(fColorPreview)
-					.Add(fEyeDropper)
-					.SetInsets(0, 0, B_USE_DEFAULT_SPACING, 0)
+				.AddGroup(B_HORIZONTAL, B_USE_SMALL_SPACING)
+					.Add(fWebSafeSelector)
+					.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)						
+						.Add(fColorPreview)
+						.Add(fEyeDropper)
+						.SetInsets(0, 0, B_USE_DEFAULT_SPACING, 0)
+						.End()
 					.End()
 				.AddGrid(1, 1)
 					.Add(fRadioButton[0], 0, 0)

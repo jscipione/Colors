@@ -7,27 +7,27 @@
  */
 
 
-#include "WebSafeView.h"
+#include "WebSafeSelector.h"
 
 #include <Handler.h>
 #include <Message.h>
 #include <Window.h>
 
 
-WebSafeView::WebSafeView(BRect frame)
+WebSafeSelector::WebSafeSelector(BRect frame)
 	:
-	BView(frame, "WebSafeView", B_FOLLOW_TOP | B_FOLLOW_LEFT, B_WILL_DRAW)
+	BView(frame, "WebSafeSelector", B_FOLLOW_TOP | B_FOLLOW_LEFT, B_WILL_DRAW)
 {
 }
 
 
-WebSafeView::~WebSafeView()
+WebSafeSelector::~WebSafeSelector()
 {
 }
 
 
 void
-WebSafeView::Draw(BRect updateRect)
+WebSafeSelector::Draw(BRect updateRect)
 {
 	rgb_color border = (rgb_color){ 184, 184, 184 };
 	SetHighColor(border);
@@ -39,7 +39,7 @@ WebSafeView::Draw(BRect updateRect)
 
 
 void
-WebSafeView::MouseDown(BPoint where)
+WebSafeSelector::MouseDown(BPoint where)
 {
 	BMessage message;
 	message.AddData("RGBColor", B_RGB_COLOR_TYPE, &fColor, sizeof(fColor));
@@ -51,14 +51,14 @@ WebSafeView::MouseDown(BPoint where)
 
 
 rgb_color
-WebSafeView::GetColor() const
+WebSafeSelector::GetColor() const
 {
 	return fColor;
 }
 
 
 void
-WebSafeView::SetColor(long int c)
+WebSafeSelector::SetColor(long int c)
 {
 	rgb_color color;
 	color.red   = (c >> 16) & 255;
@@ -69,7 +69,7 @@ WebSafeView::SetColor(long int c)
 
 
 void
-WebSafeView::SetColor(rgb_color color)
+WebSafeSelector::SetColor(rgb_color color)
 {
 	color.alpha = 255;
 	fColor = color;

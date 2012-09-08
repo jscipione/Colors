@@ -2,8 +2,8 @@
  * Copyright 2012 Haiku, Inc. All Rights Reserved.
  * Distributed under the terms of the MIT License.
  */
-#ifndef WEB_SAFE_VIEW_H
-#define WEB_SAFE_VIEW_H
+#ifndef WEB_SAFE_SELECTOR_H
+#define WEB_SAFE_SELECTOR_H
 
 
 #include <View.h>
@@ -11,13 +11,12 @@
 #define MSG_WEBSAFE 'WebS'
 
 
-class WebSafeView : public BView {
+class WebSafeSelector : public BView {
 	public:
-									WebSafeView(BRect frame);
-		virtual						~WebSafeView();
+									WebSafeSelector(BRect frame);
+		virtual						~WebSafeSelector();
 
 		virtual	void				Draw(BRect updateRect);
-		virtual	void				MessageReceived(BMessage *message);
 		virtual	void				MouseDown(BPoint where);
 
 				rgb_color			GetColor() const;
@@ -28,4 +27,4 @@ class WebSafeView : public BView {
 				rgb_color			fColor;
 };
 
-#endif	// WEB_SAFE_VIEW_H
+#endif	// WEB_SAFE_SELECTOR_H
