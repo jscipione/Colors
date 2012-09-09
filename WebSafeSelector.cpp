@@ -9,6 +9,7 @@
 
 #include "WebSafeSelector.h"
 
+#include <Control.h>
 #include <InterfaceDefs.h>
 #include <Point.h>
 #include <Polygon.h>
@@ -26,6 +27,18 @@ round_to_nearest_websafe_color(rgb_color color)
 	color.blue = (uint8)(floor((color.blue + (0x33 / 2)) / 0x33) * 0x33);
 
 	return color;
+}
+
+
+WebSafeSelector::WebSafeSelector()
+	:
+	ColorSelector()
+{
+}
+
+
+WebSafeSelector::~WebSafeSelector()
+{
 }
 
 
@@ -79,6 +92,18 @@ WebSafeSelector::Draw(BRect updateRect)
 		StrokePolygon(rhombus3);
 		delete rhombus3;
 	}
+}
+
+
+void
+WebSafeSelector::SetColor(long int c)
+{
+	rgb_color color;
+	color.red   = (c >> 16) & 255;
+	color.green = (c >> 8) & 255;
+	color.blue  = c & 255;
+
+	SetColor(color);
 }
 
 

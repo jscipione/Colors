@@ -8,16 +8,16 @@
 
 #include "ColorSelector.h"
 
-#define MSG_WEBSAFE 'WebS'
-
 
 class WebSafeSelector : public ColorSelector {
 	public:
-		virtual	void				Draw(BRect updateRect);
-		virtual	void				SetColor(rgb_color color);
+									WebSafeSelector();
+		virtual						~WebSafeSelector();
 
-	private:
-				rgb_color			fColor;
+		virtual	void				Draw(BRect updateRect);
+
+		virtual	void				SetColor(long int color);
+		virtual	void				SetColor(rgb_color color);
 };
 
 #endif	// WEB_SAFE_SELECTOR_H
