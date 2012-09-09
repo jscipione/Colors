@@ -177,11 +177,11 @@ void
 WebSafeSelector::SetColor(rgb_color color)
 {
 	
-	if (!IsHidden() &&
-			(color.red % 0x33) == 0 &&
-			(color.green % 0x33) == 0 &&
-			(color.blue % 0x33) == 0) {
-		Hide();
+	if ((color.red % 0x33) == 0 &&
+		(color.green % 0x33) == 0 &&
+		(color.blue % 0x33) == 0) {
+		if (!IsHidden())
+			Hide();
 	} else if (IsHidden())
 		Show();
 
