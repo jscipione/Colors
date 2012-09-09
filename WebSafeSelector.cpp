@@ -47,6 +47,12 @@ WebSafeSelector::Draw(BRect updateRect)
 {
 	ColorSelector::Draw(updateRect);
 
+	if (fIsHidden) {
+		SetHighColor(ViewColor());
+		FillRect(updateRect);
+		return;
+	}
+
 	if (updateRect.Intersects(INDICATOR_RECT)) {
 		rgb_color black = (rgb_color){ 0, 0, 0 };
 		rgb_color light = tint_color(black, B_LIGHTEN_MAX_TINT);
@@ -92,18 +98,6 @@ WebSafeSelector::Draw(BRect updateRect)
 		StrokePolygon(rhombus3);
 		delete rhombus3;
 	}
-}
-
-
-void
-WebSafeSelector::SetColor(long int c)
-{
-	rgb_color color;
-	color.red   = (c >> 16) & 255;
-	color.green = (c >> 8) & 255;
-	color.blue  = c & 255;
-
-	SetColor(color);
 }
 
 

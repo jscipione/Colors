@@ -39,6 +39,7 @@
 #include "ColorsWindow.h"
 #include "convert_rgb_hsv.h"
 #include "EyeDropper.h"
+#include "OutOfGamutSelector.h"
 #include "WebSafeSelector.h"
 
 #define round(x) (int)(x+.5)
@@ -79,6 +80,7 @@ ColorPickerView::ColorPickerView()
 	fColorSlider = new ColorSlider(fColorMode, fHue, fVal);
 	fColorPreview = new ColorPreview();
 	fEyeDropper = new EyeDropper();
+	fOutOfGamutSelector = new OutOfGamutSelector();
 	fWebSafeSelector = new WebSafeSelector();
 
 	const char *title[] = { "H", "S", "V", "R", "G", "B" };
@@ -135,8 +137,11 @@ ColorPickerView::ColorPickerView()
 			.Add(fColorSlider)
 			.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)
 				.AddGroup(B_HORIZONTAL, B_USE_SMALL_SPACING)
-					.Add(fWebSafeSelector)
-					.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)						
+					.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)
+						.Add(fOutOfGamutSelector)
+						.Add(fWebSafeSelector)
+					.End()
+					.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)
 						.Add(fColorPreview)
 						.Add(fEyeDropper)
 						.SetInsets(0, 0, B_USE_DEFAULT_SPACING, 0)
@@ -198,6 +203,9 @@ ColorPickerView::AttachedToWindow()
 
 	fColorPreview->SetNewColor(selected_color);
 	fColorPreview->SetTarget(this);
+
+	fOutOfGamutSelector->SetColor(selected_color);
+	fOutOfGamutSelector->SetTarget(this);
 
 	fWebSafeSelector->SetColor(selected_color);
 	fWebSafeSelector->SetTarget(this);
@@ -510,6 +518,7 @@ ColorPickerView::SetColor(rgb_color base)
 	fColorField->SetMarkerToColor(base);
 
 	fColorPreview->SetColor(base);
+	fOutOfGamutSelector->SetColor(base);
 	fWebSafeSelector->SetColor(base);
 
 	fRequiresUpdate = true;
@@ -622,6 +631,7 @@ ColorPickerView::_UpdateColor(float value, float value1, float value2)
 		(int)(fBlue * 255), 255 };
 
 	fColorPreview->SetColor(base);
+	fOutOfGamutSelector->SetColor(base);
 	fWebSafeSelector->SetColor(base);
 }
 

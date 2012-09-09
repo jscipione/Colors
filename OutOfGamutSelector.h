@@ -2,21 +2,21 @@
  * Copyright 2012 Haiku, Inc. All Rights Reserved.
  * Distributed under the terms of the MIT License.
  */
-#ifndef WEB_SAFE_SELECTOR_H
-#define WEB_SAFE_SELECTOR_H
+#ifndef OUT_OF_GAMUT_SELECTOR_H
+#define OUT_OF_GAMUT_SELECTOR_H
 
 
 #include "ColorSelector.h"
 
 
-class WebSafeSelector : public ColorSelector {
+class OutOfGamutSelector : public ColorSelector {
 	public:
-									WebSafeSelector();
-		virtual						~WebSafeSelector();
+									OutOfGamutSelector();
+		virtual						~OutOfGamutSelector();
 
 		virtual	void				Draw(BRect updateRect);
 
 		virtual	void				SetColor(rgb_color color);
 };
 
-#endif	// WEB_SAFE_SELECTOR_H
+#endif	// OUT_OF_GAMUT_SELECTOR_H
