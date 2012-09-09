@@ -235,12 +235,10 @@ ColorField::SetModeAndValue(color_mode mode, float fixed_value)
 
 	fBgBitmap[0]->Unlock();
 
-	if (fFixedValue != fixed_value || fColorMode != mode) {
-		fFixedValue = fixed_value;
-		fColorMode = mode;
+	fFixedValue = fixed_value;
+	fColorMode = mode;
 
-		Update(3);
-	}
+	Update(3);
 
 	SetMarkerToColor(color);
 }

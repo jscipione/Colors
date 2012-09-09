@@ -199,10 +199,10 @@ ColorPickerView::AttachedToWindow()
 	fColorPreview->SetNewColor(selected_color);
 	fColorPreview->SetTarget(this);
 
-	fEyeDropper->SetTarget(this);
-
 	fWebSafeSelector->SetColor(selected_color);
 	fWebSafeSelector->SetTarget(this);
+
+	fEyeDropper->SetTarget(this);
 
 	for (int32 i = 0; i < 6; ++i) {
 		fRadioButton[i]->SetFontSize(9.0);
@@ -290,6 +290,7 @@ ColorPickerView::MessageReceived(BMessage *message)
 		}
 
 		case MSG_COLOR_PREVIEW:
+		case MSG_WEBSAFE:
 		{
 			rgb_color* color;
 			ssize_t numBytes;
@@ -509,7 +510,6 @@ ColorPickerView::SetColor(rgb_color base)
 	fColorField->SetMarkerToColor(base);
 
 	fColorPreview->SetColor(base);
-
 	fWebSafeSelector->SetColor(base);
 
 	fRequiresUpdate = true;

@@ -150,10 +150,6 @@ WebSafeSelector::MouseDown(BPoint where)
 	BMessage message;
 	message.AddData("RGBColor", B_RGB_COLOR_TYPE, &fColor, sizeof(fColor));
 
-	BHandler* colorpreview;
-	if ((colorpreview = (BHandler*)Window()->FindView("color preview")))
-		Window()->PostMessage(&message, colorpreview);
-
 	Invoke();
 }
 
