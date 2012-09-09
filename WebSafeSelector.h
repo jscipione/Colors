@@ -6,23 +6,15 @@
 #define WEB_SAFE_SELECTOR_H
 
 
-#include <Control.h>
+#include "ColorSelector.h"
 
 #define MSG_WEBSAFE 'WebS'
 
 
-class WebSafeSelector : public BControl {
+class WebSafeSelector : public ColorSelector {
 	public:
-									WebSafeSelector();
-		virtual						~WebSafeSelector();
-
 		virtual	void				Draw(BRect updateRect);
-		virtual	status_t			Invoke(BMessage* mesesage = NULL);
-		virtual	void				MouseDown(BPoint where);
-
-				rgb_color			GetColor() const;
-				void				SetColor(rgb_color color);
-				void				SetColor(long int color);
+		virtual	void				SetColor(rgb_color color);
 
 	private:
 				rgb_color			fColor;

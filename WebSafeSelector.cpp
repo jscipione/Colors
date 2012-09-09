@@ -14,8 +14,8 @@
 #include <Polygon.h>
 #include <Window.h>
 
-#define INDICATOR_RECT BRect(4.0, 0.0, 16.0, 12.0)
 #define COLOR_RECT BRect(0.0, 18.0, 18.0, 36.0)
+#define INDICATOR_RECT BRect(4.0, 0.0, 16.0, 12.0)
 
 
 rgb_color
@@ -29,56 +29,10 @@ round_to_nearest_websafe_color(rgb_color color)
 }
 
 
-WebSafeSelector::WebSafeSelector()
-	:
-	BControl("WebSafeSelector", "", new BMessage(MSG_WEBSAFE), B_WILL_DRAW)
-{
-}
-
-
-WebSafeSelector::~WebSafeSelector()
-{
-}
-
-
 void
 WebSafeSelector::Draw(BRect updateRect)
 {
-	if (updateRect.Intersects(COLOR_RECT)) {
-		rgb_color background = ui_color(B_PANEL_BACKGROUND_COLOR);
-		rgb_color shadow = tint_color(background, B_DARKEN_1_TINT);
-		rgb_color darkShadow = tint_color(background, B_DARKEN_3_TINT);
-		rgb_color light = tint_color(background, B_LIGHTEN_MAX_TINT);
-
-		BRect bounds = COLOR_RECT;
-
-		BeginLineArray(4);
-		AddLine(BPoint(bounds.left, bounds.bottom),
-			BPoint(bounds.left, bounds.top), shadow);
-		AddLine(BPoint(bounds.left + 1.0, bounds.top),
-			BPoint(bounds.right, bounds.top), shadow);
-		AddLine(BPoint(bounds.right, bounds.top + 1.0),
-			BPoint(bounds.right, bounds.bottom), light);
-		AddLine(BPoint(bounds.right - 1.0, bounds.bottom),
-			BPoint(bounds.left + 1.0, bounds.bottom), light);
-		EndLineArray();
-		bounds.InsetBy(1.0, 1.0);
-
-		BeginLineArray(4);
-		AddLine(BPoint(bounds.left, bounds.bottom),
-			BPoint(bounds.left, bounds.top), darkShadow);
-		AddLine(BPoint(bounds.left + 1.0, bounds.top),
-			BPoint(bounds.right, bounds.top), darkShadow);
-		AddLine(BPoint(bounds.right, bounds.top + 1.0),
-			BPoint(bounds.right, bounds.bottom), background);
-		AddLine(BPoint(bounds.right - 1.0, bounds.bottom),
-			BPoint(bounds.left + 1.0, bounds.bottom), background);
-		EndLineArray();
-		bounds.InsetBy(1.0, 1.0);
-
-		SetHighColor(fColor);
-		FillRect(bounds);
-	}
+	ColorSelector::Draw(updateRect);
 
 	if (updateRect.Intersects(INDICATOR_RECT)) {
 		rgb_color black = (rgb_color){ 0, 0, 0 };
@@ -125,51 +79,6 @@ WebSafeSelector::Draw(BRect updateRect)
 		StrokePolygon(rhombus3);
 		delete rhombus3;
 	}
-}
-
-
-status_t
-WebSafeSelector::Invoke(BMessage *message)
-{
-	if (message == NULL)
-		message = Message();
-
-	message->RemoveName("selected_color");
-	message->AddData("selected_color", B_RGB_COLOR_TYPE, &fColor,
-		sizeof(fColor));
-
-	return BControl::Invoke(message);
-}
-
-
-void
-WebSafeSelector::MouseDown(BPoint where)
-{
-	Window()->Activate();
-
-	BMessage message;
-	message.AddData("RGBColor", B_RGB_COLOR_TYPE, &fColor, sizeof(fColor));
-
-	Invoke();
-}
-
-
-rgb_color
-WebSafeSelector::GetColor() const
-{
-	return fColor;
-}
-
-
-void
-WebSafeSelector::SetColor(long int c)
-{
-	rgb_color color;
-	color.red   = (c >> 16) & 255;
-	color.green = (c >> 8) & 255;
-	color.blue  = c & 255;
-
-	SetColor(color);
 }
 
 

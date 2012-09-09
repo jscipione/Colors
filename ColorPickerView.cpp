@@ -290,7 +290,7 @@ ColorPickerView::MessageReceived(BMessage *message)
 		}
 
 		case MSG_COLOR_PREVIEW:
-		case MSG_WEBSAFE:
+		case MSG_COLOR_SELECTOR:
 		{
 			rgb_color* color;
 			ssize_t numBytes;
