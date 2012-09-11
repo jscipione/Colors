@@ -34,7 +34,7 @@ WebSafeSelector::WebSafeSelector()
 	:
 	ColorSelector()
 {
-	SetToolTip("Click to select a web safe color");
+	Show();
 }
 
 
@@ -99,6 +99,20 @@ WebSafeSelector::Draw(BRect updateRect)
 		StrokePolygon(rhombus3);
 		delete rhombus3;
 	}
+}
+
+
+void
+WebSafeSelector::Hide() {
+	ColorSelector::Hide();
+	SetToolTip("");
+}
+
+
+void
+WebSafeSelector::Show() {
+	ColorSelector::Show();
+	SetToolTip("Click to select a web safe color");
 }
 
 

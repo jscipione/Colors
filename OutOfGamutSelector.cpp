@@ -68,7 +68,7 @@ OutOfGamutSelector::OutOfGamutSelector()
 	:
 	ColorSelector()
 {
-	SetToolTip("Click to select an in gamut color for printing");
+	Show();
 }
 
 
@@ -117,6 +117,20 @@ OutOfGamutSelector::Draw(BRect updateRect)
 		SetHighColor(medium);
 		StrokeLine(point7, point8);
 	}
+}
+
+
+void
+OutOfGamutSelector::Hide() {
+	ColorSelector::Hide();
+	SetToolTip("");
+}
+
+
+void
+OutOfGamutSelector::Show() {
+	ColorSelector::Show();
+	SetToolTip("Click to select an in gamut color for printing");
 }
 
 

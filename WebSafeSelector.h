@@ -16,6 +16,8 @@ class WebSafeSelector : public ColorSelector {
 
 		virtual	void				Draw(BRect updateRect);
 
+		virtual	void				Hide();
+		virtual void				Show();
 		virtual	void				SetColor(rgb_color color);
 };
 
