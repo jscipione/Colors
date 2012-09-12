@@ -18,6 +18,8 @@ class ColorSelector : public BControl {
 
 		virtual	void				Draw(BRect updateRect);
 		virtual	status_t			Invoke(BMessage* mesesage = NULL);
+		virtual	void				MouseMoved(BPoint where, uint32 code,
+										const BMessage* message);
 		virtual	void				MouseDown(BPoint where);
 
 		virtual	void				Hide();
@@ -31,6 +33,7 @@ class ColorSelector : public BControl {
 	protected:
 				rgb_color			fColor;
 				bool				fIsHidden;
+				bool				fMouseOver;
 };
 
 #endif	// COLOR_SELECTOR_H

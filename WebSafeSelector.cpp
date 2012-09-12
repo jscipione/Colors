@@ -56,9 +56,19 @@ WebSafeSelector::Draw(BRect updateRect)
 
 	if (updateRect.Intersects(INDICATOR_RECT)) {
 		rgb_color black = (rgb_color){ 0, 0, 0 };
-		rgb_color light = tint_color(black, B_LIGHTEN_MAX_TINT);
-		rgb_color medium = tint_color(black, B_LIGHTEN_2_TINT);
-		rgb_color dark = tint_color(black, B_LIGHTEN_1_TINT);
+		rgb_color light;
+		rgb_color medium;
+		rgb_color dark;
+
+		if (fMouseOver) {
+			light  = (rgb_color){ 0, 255, 0, 255 };
+			medium = (rgb_color){ 255, 0, 0, 255 };
+			dark   = (rgb_color){ 0, 0, 255, 255 };
+		} else {
+			light  = tint_color(black, B_LIGHTEN_MAX_TINT);
+			medium = tint_color(black, B_LIGHTEN_2_TINT);
+			dark   = tint_color(black, B_LIGHTEN_1_TINT);
+		}
 
 		BRect bounds = INDICATOR_RECT;
 

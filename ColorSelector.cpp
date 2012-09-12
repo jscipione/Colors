@@ -13,6 +13,7 @@
 #include <Point.h>
 #include <Window.h>
 
+#define INDICATOR_RECT BRect(4.0, 0.0, 16.0, 12.0)
 #define COLOR_RECT BRect(0.0, 16.0, 18.0, 34.0)
 
 
@@ -20,7 +21,8 @@ ColorSelector::ColorSelector()
 	:
 	BControl("ColorSelector", "", new BMessage(MSG_COLOR_SELECTOR),
 		B_WILL_DRAW),
-	fIsHidden(false)
+	fIsHidden(false),
+	fMouseOver(false)
 {
 }
 
@@ -109,9 +111,33 @@ ColorSelector::MouseDown(BPoint where)
 
 
 void
+ColorSelector::MouseMoved(BPoint where, uint32 code, const BMessage *message)
+{
+	if (fIsHidden)
+		return;
+
+	switch (code) {
+		case B_ENTERED_VIEW:
+		case B_INSIDE_VIEW:
+			fMouseOver = true;
+			break;
+
+		case B_EXITED_VIEW:
+		case B_OUTSIDE_VIEW:
+			fMouseOver = false;
+			break;
+	}
+
+	Invalidate(INDICATOR_RECT);
+}
+
+
+void
 ColorSelector::Hide()
 {
 	fIsHidden = true;
+	fMouseOver = false;
+		// so that indicator won't be colored when shown
 	Invalidate();
 }
 

@@ -90,7 +90,16 @@ OutOfGamutSelector::Draw(BRect updateRect)
 
 	if (updateRect.Intersects(INDICATOR_RECT)) {
 		rgb_color black = (rgb_color){ 0, 0, 0 };
-		rgb_color medium = tint_color(black, B_LIGHTEN_2_TINT);
+		rgb_color warning;
+		rgb_color accent;
+
+		if (fMouseOver) {
+			warning = (rgb_color){ 239, 197, 27, 255 };
+			accent = tint_color(warning, B_DARKEN_1_TINT);
+		} else {
+			warning = ViewColor();
+			accent = tint_color(black, B_LIGHTEN_2_TINT);
+		}
 
 		BRect bounds = INDICATOR_RECT;
 
@@ -98,7 +107,7 @@ OutOfGamutSelector::Draw(BRect updateRect)
 		BPoint point2(bounds.LeftTop() + BPoint(10, 11));
 		BPoint point3(bounds.LeftTop() + BPoint(5, 1));
 
-		SetHighColor(ViewColor());
+		SetHighColor(warning);
 		FillTriangle(point1, point2, point3);
 
 		SetHighColor(black);
@@ -114,7 +123,7 @@ OutOfGamutSelector::Draw(BRect updateRect)
 		BPoint point7 = point1 + BPoint(1, -1);
 		BPoint point8 = point2 + BPoint(-1, -1);
 
-		SetHighColor(medium);
+		SetHighColor(accent);
 		StrokeLine(point7, point8);
 	}
 }
