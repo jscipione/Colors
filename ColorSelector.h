@@ -10,8 +10,8 @@
 
 #define MSG_COLOR_SELECTOR 'CSel'
 
-#define INDICATOR_RECT BRect(4.0, 0.0, 16.0, 12.0)
-#define COLOR_RECT BRect(0.0, 16.0, 18.0, 34.0)
+#define INDICATOR_RECT BRect(8.0, 0.0, 20.0, 12.0)
+#define COLOR_RECT BRect(4.0, 16.0, 22.0, 34.0)
 
 
 class ColorSelector : public BControl {
