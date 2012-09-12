@@ -174,7 +174,7 @@ ColorPickerView::ColorPickerView()
 				.AddGlue()
 				.End()
 			.SetInsets(B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING,
-				B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING)
+				1, B_USE_DEFAULT_SPACING)
 			.End();
 }
 
