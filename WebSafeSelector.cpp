@@ -15,9 +15,6 @@
 #include <Polygon.h>
 #include <Window.h>
 
-#define INDICATOR_RECT BRect(4.0, 0.0, 16.0, 12.0)
-#define COLOR_RECT BRect(0.0, 16.0, 18.0, 34.0)
-
 
 rgb_color
 round_to_nearest_websafe_color(rgb_color color)
