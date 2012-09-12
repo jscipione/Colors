@@ -11,6 +11,7 @@
 
 #include <InterfaceDefs.h>
 #include <Point.h>
+#include <Size.h>
 #include <Window.h>
 
 
@@ -21,6 +22,8 @@ ColorSelector::ColorSelector()
 	fIsHidden(false),
 	fMouseOver(false)
 {
+	SetExplicitMaxSize(
+		BSize(COLOR_RECT.right + COLOR_RECT.left, B_SIZE_UNSET));
 }
 
 
