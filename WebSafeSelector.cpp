@@ -119,7 +119,7 @@ WebSafeSelector::Hide() {
 void
 WebSafeSelector::Show() {
 	ColorSelector::Show();
-	SetToolTip("Click to select a web safe color");
+	SetToolTip("Click to select the nearest web safe color");
 }
 
 

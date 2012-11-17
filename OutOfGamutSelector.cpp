@@ -92,7 +92,7 @@ OutOfGamutSelector::Hide() {
 void
 OutOfGamutSelector::Show() {
 	ColorSelector::Show();
-	SetToolTip("Click to select an in gamut color for printing");
+	SetToolTip("Click to select the nearest in-gamut color");
 }
 
 
