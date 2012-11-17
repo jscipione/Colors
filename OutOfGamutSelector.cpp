@@ -16,56 +16,12 @@
 #include <Window.h>
 
 
-typedef struct cmyk_color {
-	float cyan;
-	float magenta;
-	float yellow;
-	float black;
-} cmyk_color;
-
-cmyk_color rgb2cmyk(uint8 red, uint8 green, uint8 blue);
-rgb_color cmyk2rgb(int cyan, int magenta, int yellow, int black);
-
-
-cmyk_color
-rgb2cmyk(uint8 red, uint8 green, uint8 blue)
-{
-	float c = 1 - (red / 255.0f);
-	float m = 1 - (green / 255.0f);
-	float y = 1 - (blue / 255.0f);
-	float k = MIN(MIN(c, m), y);
-
-	cmyk_color color;
-	color.cyan    = 100.0f * (c - k) / (1 - k);
-	color.magenta = 100.0f * (m - k) / (1 - k);
-	color.yellow  = 100.0f * (y - k) / (1 - k);
-	color.black   = 100.0f * k;
-
-	return color;
-}
-
-
-rgb_color
-cmyk2rgb(float cyan, float magenta, float yellow, float black)
-{
-	cyan = MIN(255.0f, cyan + black);
-	magenta = MIN(255.0f, magenta + black);
-	yellow = MIN(255.0f, yellow + black);
-
-	rgb_color color;
-	color.red   = (uint8)(255 - cyan);
-	color.green = (uint8)(255 - magenta);
-	color.blue  = (uint8)(255 - yellow);
-
-	return color;
-}
-
-
 OutOfGamutSelector::OutOfGamutSelector()
 	:
 	ColorSelector()
 {
-	Show();
+	// Under construction
+	//Show();
 }
 
 
@@ -143,17 +99,14 @@ OutOfGamutSelector::Show() {
 void
 OutOfGamutSelector::SetColor(rgb_color color)
 {
-	cmyk_color cmyk = rgb2cmyk(color.red, color.green, color.blue);
-	rgb_color rgb = cmyk2rgb(cmyk.cyan, cmyk.magenta, cmyk.yellow, cmyk.black);
-	if (rgb.red == color.red &&
-		rgb.green == color.green &&
-		rgb.blue == color.blue) {
+	// stub, set to closest in-gamut color here
+	if (true) {
 		if (!IsHidden())
 			Hide();
 	} else if (IsHidden())
 		Show();
 
-	fColor = rgb;
+	fColor = color;
 	if (Window() && !IsHidden())
 		Draw(COLOR_RECT);
 }
