@@ -48,7 +48,7 @@
 
 ColorPickerView::ColorPickerView()
 	:
-	BView("color picker view", B_WILL_DRAW | B_PULSE_NEEDED),
+	BView("ColorPickerView", B_WILL_DRAW | B_PULSE_NEEDED),
 	fColorMode(S_SELECTED),
 	fHue(0.0),
 	fSat(1.0),
@@ -63,124 +63,54 @@ ColorPickerView::ColorPickerView()
 	fMouseOffset(BPoint(0, 0)),
 	fRequiresUpdate(false)
 {
-	SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
+	_Init(static_cast<ColorsApplication*>(be_app)->Settings());
+}
 
-	BMessage* settings = static_cast<ColorsApplication*>(be_app)->Settings();
 
-	long int int_color;
-	if (settings->FindInt32("selected_color", &int_color) == B_OK) {
-		fRed = (float)(int_color >> 16) / 255;
-		fGreen = (float)((int_color >> 8) & 255) / 255;
-		fBlue = (float)(int_color & 255) / 255;
-
-		RGB_to_HSV(fRed, fGreen, fBlue, fHue, fSat, fVal);
-	}
-
-	fColorField = new ColorField(fColorMode, fSat);
-	fColorSlider = new ColorSlider(fColorMode, fHue, fVal);
-	fColorPreview = new ColorPreview();
-	fEyeDropper = new EyeDropper();
-	fOutOfGamutSelector = new OutOfGamutSelector();
-	fWebSafeSelector = new WebSafeSelector();
-
-	const char *title[] = { "H", "S", "V", "R", "G", "B" };
-
-	for (int32 i = 0; i < 6; ++i) {
-		fRadioButton[i] = new BRadioButton(NULL, title[i],
-			new BMessage(MSG_RADIOBUTTON + i));
-		fRadioButton[i]->SetExplicitMinSize(BSize(32.0, 19.0));
-
-		fTextControl[i] = new BTextControl(NULL, NULL, NULL,
-			new BMessage(MSG_TEXTCONTROL + i));
-	}
-
-	int32 selectedMode;
-	if (settings->FindInt32("selected_mode", &selectedMode) != B_OK) {
-		// default to saturation mode
-		selectedMode = 1;
-	}
-	fRadioButton[selectedMode]->SetValue(B_CONTROL_ON);
-	switch (selectedMode) {
-		case 0:
-			SetColorMode(H_SELECTED);
-			break;
-
-		case 1:
-			SetColorMode(S_SELECTED);
-			break;
-
-		case 2:
-			SetColorMode(V_SELECTED);
-			break;
-
-		case 3:
-			SetColorMode(R_SELECTED);
-			break;
-
-		case 4:
-			SetColorMode(G_SELECTED);
-			break;
-
-		case 5:
-			SetColorMode(B_SELECTED);
-			break;
-	}
-
-	fHexTextControl = new BTextControl(NULL, "#", NULL,
-		new BMessage(MSG_HEXTEXTCONTROL));
-
-	BStringView* spacer = new BStringView("spacer", "");
-
-	BLayoutBuilder::Group<>(this)
-		.AddGroup(B_HORIZONTAL, B_USE_SMALL_SPACING)
-			.Add(fColorField)
-			.Add(fColorSlider)
-			.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)
-				.AddGroup(B_HORIZONTAL, B_USE_SMALL_SPACING)
-					.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)
-						.Add(fOutOfGamutSelector)
-						.Add(fWebSafeSelector)
-					.End()
-					.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)
-						.Add(fColorPreview)
-						.Add(fEyeDropper)
-						.SetInsets(0, 0, B_USE_DEFAULT_SPACING, 0)
-						.End()
-					.End()
-				.AddGrid(1, 1)
-					.Add(fRadioButton[0], 0, 0)
-					.Add(fTextControl[0], 1, 0)
-					.Add(new BStringView("degree", "˚"), 2, 0)
-					.Add(fRadioButton[1], 0, 1)
-					.Add(fTextControl[1], 1, 1)
-					.Add(new BStringView("percent", "%"), 2, 1)
-					.Add(fRadioButton[2], 0, 2)
-					.Add(fTextControl[2], 1, 2)
-					.Add(new BStringView("percent", "%"), 2, 2)
-					.Add(fRadioButton[3], 0, 3)
-					.Add(fTextControl[3], 1, 3)
-					.Add(spacer, 2, 3)
-					.Add(fRadioButton[4], 0, 4)
-					.Add(fTextControl[4], 1, 4)
-					.Add(spacer, 2, 4)
-					.Add(fRadioButton[5], 0, 5)
-					.Add(fTextControl[5], 1, 5)
-					.Add(spacer, 2, 5)
-					.End()
-				.AddGroup(B_HORIZONTAL, B_USE_DEFAULT_SPACING)
-					.Add(fHexTextControl)
-					.Add(spacer)
-					.End()
-				.AddGlue()
-				.End()
-			.SetInsets(B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING, 1,
-				B_USE_DEFAULT_SPACING)
-			.End();
+ColorPickerView::ColorPickerView(BMessage* archive)
+	:
+	BView("ColorPickerView", B_WILL_DRAW | B_PULSE_NEEDED),
+	fColorMode(S_SELECTED),
+	fHue(0.0),
+	fSat(1.0),
+	fVal(1.0),
+	fRed(1.0),
+	fGreen(0.0),
+	fBlue(0.0),
+	fPointer0(NULL),
+	fPointer1(NULL),
+	fPointer2(NULL),
+	fMouseDown(false),
+	fMouseOffset(BPoint(0, 0)),
+	fRequiresUpdate(false)
+{
+	_Init(archive);
 }
 
 
 ColorPickerView::~ColorPickerView()
 {
+}
+
+
+status_t
+ColorPickerView::Archive(BMessage* archive, bool deep) const
+{
+	status_t ret = BView::Archive(archive, deep);
+
+	// save app signature for replicant add-on loading
+	if (ret == B_OK)
+		ret = archive->AddString("add_on", kSignature);
+
+	// save all the options
+	if (ret == B_OK)
+		ret = SaveSettings(archive);
+
+	// add class info last
+	if (ret == B_OK)
+		ret = archive->AddString("class", "ColorPickerView");
+
+	return ret;
 }
 
 
@@ -270,6 +200,16 @@ ColorPickerView::Draw(BRect updateRect)
 
 	// exclude border from update rect
 	updateRect = bounds.InsetByCopy(1.0, 1.0) & updateRect;
+}
+
+
+ColorPickerView*
+ColorPickerView::Instantiate(BMessage* archive)
+{
+	if (!validate_instantiation(archive, "ColorPickerView"))
+		return NULL;
+
+	return new ColorPickerView(archive);
 }
 
 
@@ -573,11 +513,9 @@ ColorPickerView::SetColorMode(color_mode mode)
 }
 
 
-void
-ColorPickerView::SaveSettings()
+status_t
+ColorPickerView::SaveSettings(BMessage* settings) const
 {
-	BMessage* settings = static_cast<ColorsApplication*>(be_app)->Settings();
-
 	settings->RemoveName("selected_color");
 	int32 int_color = ((int)(fRed * 255) << 16)
 		+ ((int)(fGreen * 255) << 8)
@@ -591,10 +529,129 @@ ColorPickerView::SaveSettings()
 			break;
 		}
 	}
+
+	return B_OK;
 }
 
 
 // #pragma mark -
+
+
+void
+ColorPickerView::_Init(BMessage* settings)
+{
+	SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
+
+	long int int_color;
+	if (settings->FindInt32("selected_color", &int_color) == B_OK) {
+		fRed = (float)(int_color >> 16) / 255;
+		fGreen = (float)((int_color >> 8) & 255) / 255;
+		fBlue = (float)(int_color & 255) / 255;
+
+		RGB_to_HSV(fRed, fGreen, fBlue, fHue, fSat, fVal);
+	}
+
+	fColorField = new ColorField(fColorMode, fSat);
+	fColorSlider = new ColorSlider(fColorMode, fHue, fVal);
+	fColorPreview = new ColorPreview();
+	fEyeDropper = new EyeDropper();
+	fOutOfGamutSelector = new OutOfGamutSelector();
+	fWebSafeSelector = new WebSafeSelector();
+
+	const char *title[] = { "H", "S", "V", "R", "G", "B" };
+
+	for (int32 i = 0; i < 6; ++i) {
+		fRadioButton[i] = new BRadioButton(NULL, title[i],
+			new BMessage(MSG_RADIOBUTTON + i));
+		fRadioButton[i]->SetExplicitMinSize(BSize(32.0, 19.0));
+
+		fTextControl[i] = new BTextControl(NULL, NULL, NULL,
+			new BMessage(MSG_TEXTCONTROL + i));
+	}
+
+	int32 selectedMode;
+	if (settings->FindInt32("selected_mode", &selectedMode) != B_OK) {
+		// default to saturation mode
+		selectedMode = 1;
+	}
+	fRadioButton[selectedMode]->SetValue(B_CONTROL_ON);
+	switch (selectedMode) {
+		case 0:
+			SetColorMode(H_SELECTED);
+			break;
+
+		case 1:
+			SetColorMode(S_SELECTED);
+			break;
+
+		case 2:
+			SetColorMode(V_SELECTED);
+			break;
+
+		case 3:
+			SetColorMode(R_SELECTED);
+			break;
+
+		case 4:
+			SetColorMode(G_SELECTED);
+			break;
+
+		case 5:
+			SetColorMode(B_SELECTED);
+			break;
+	}
+
+	fHexTextControl = new BTextControl(NULL, "#", NULL,
+		new BMessage(MSG_HEXTEXTCONTROL));
+
+	BStringView* spacer = new BStringView("spacer", "");
+
+	BLayoutBuilder::Group<>(this)
+		.AddGroup(B_HORIZONTAL, B_USE_SMALL_SPACING)
+			.Add(fColorField)
+			.Add(fColorSlider)
+			.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)
+				.AddGroup(B_HORIZONTAL, B_USE_SMALL_SPACING)
+					.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)
+						.Add(fOutOfGamutSelector)
+						.Add(fWebSafeSelector)
+					.End()
+					.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)
+						.Add(fColorPreview)
+						.Add(fEyeDropper)
+						.SetInsets(0, 0, B_USE_DEFAULT_SPACING, 0)
+						.End()
+					.End()
+				.AddGrid(1, 1)
+					.Add(fRadioButton[0], 0, 0)
+					.Add(fTextControl[0], 1, 0)
+					.Add(new BStringView("degree", "˚"), 2, 0)
+					.Add(fRadioButton[1], 0, 1)
+					.Add(fTextControl[1], 1, 1)
+					.Add(new BStringView("percent", "%"), 2, 1)
+					.Add(fRadioButton[2], 0, 2)
+					.Add(fTextControl[2], 1, 2)
+					.Add(new BStringView("percent", "%"), 2, 2)
+					.Add(fRadioButton[3], 0, 3)
+					.Add(fTextControl[3], 1, 3)
+					.Add(spacer, 2, 3)
+					.Add(fRadioButton[4], 0, 4)
+					.Add(fTextControl[4], 1, 4)
+					.Add(spacer, 2, 4)
+					.Add(fRadioButton[5], 0, 5)
+					.Add(fTextControl[5], 1, 5)
+					.Add(spacer, 2, 5)
+					.End()
+				.AddGroup(B_HORIZONTAL, B_USE_DEFAULT_SPACING)
+					.Add(fHexTextControl)
+					.Add(spacer)
+					.End()
+				.AddGlue()
+				.End()
+			.SetInsets(B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING, -16,
+				B_USE_DEFAULT_SPACING)
+			.End();
+}
 
 
 void

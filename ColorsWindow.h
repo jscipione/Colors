@@ -16,6 +16,7 @@
 class ColorPickerView;
 class ColorWellsView;
 
+
 class ColorsWindow : public BWindow {
 public:
 									ColorsWindow(BRect frame);

@@ -10,6 +10,9 @@
 #include <Application.h>
 
 
+extern const char* kSignature;
+
+
 class BFile;
 class ColorsWindow;
 

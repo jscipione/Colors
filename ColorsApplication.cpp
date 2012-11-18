@@ -26,7 +26,7 @@
 
 
 static const char* kSettingsFileName = "Colors!_settings";
-static const char* kAppSig = "application/x-vnd.Haiku-Colors!";
+const char* kSignature = "application/x-vnd.Haiku-Colors!";
 
 static const float kDefaultWindowWidth  = 400.0;
 static const float kDefaultWindowHeight = 300.0;
@@ -34,7 +34,7 @@ static const float kDefaultWindowHeight = 300.0;
 
 ColorsApplication::ColorsApplication()
 	:
-	BApplication(kAppSig),
+	BApplication(kSignature),
 	fColorsWindow(NULL)
 {
 }

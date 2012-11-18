@@ -23,17 +23,21 @@ class EyeDropper;
 class OutOfGamutSelector;
 class WebSafeSelector;
 
+class BMessage;
 class BRadioButton;
 class BTextControl;
 
 class ColorPickerView : public BView {
 	public:
 									ColorPickerView();
+									ColorPickerView(BMessage* archive);
 		virtual						~ColorPickerView();
-			
-		virtual	void				AttachedToWindow();
 
+		virtual	status_t			Archive(BMessage* archive,
+										bool deep) const;
+		virtual	void				AttachedToWindow();
 		virtual	void				Draw(BRect updateRect);
+		static	ColorPickerView*	Instantiate(BMessage* archive);
 		virtual	void				MessageReceived(BMessage* message);
 
 		virtual	void				MouseDown(BPoint where);
@@ -48,9 +52,10 @@ class ColorPickerView : public BView {
 				color_mode			ColorMode() const { return fColorMode; }
 				void				SetColorMode(color_mode mode);
 
-				void				SaveSettings();
+				status_t			SaveSettings(BMessage* archive) const;
 
 	private:
+				void				_Init(BMessage* settings);
 				void				_GrabColor();
 				void				_SetText(BTextControl* control,
 											 const char* text,

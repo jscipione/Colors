@@ -14,6 +14,7 @@
 
 #include <Alert.h>
 #include <Application.h>
+#include <Dragger.h>
 #include <GroupLayout.h>
 #include <MenuItem.h>
 #include <Message.h>
@@ -35,6 +36,15 @@ ColorsWindow::ColorsWindow(BRect frame)
 	SetLayout(new BGroupLayout(B_VERTICAL, 0));
 
 	GetLayout()->AddView(fColorPickerView);
+
+	// create replicant dragger
+	BRect replicantFrame(fColorPickerView->Frame());
+	replicantFrame.top = replicantFrame.bottom - 7.0f;
+	replicantFrame.left = replicantFrame.right - 7.0f;
+	BDragger* dragger = new BDragger(replicantFrame, fColorPickerView,
+		B_FOLLOW_RIGHT | B_FOLLOW_BOTTOM);
+	fColorPickerView->AddChild(dragger);
+
 	GetLayout()->AddView(fColorWellsView);
 
 	BMessage* settings = static_cast<ColorsApplication*>(be_app)->Settings();
@@ -70,7 +80,8 @@ ColorsWindow::ColorsWindow(BRect frame)
 
 ColorsWindow::~ColorsWindow()
 {
-	fColorPickerView->SaveSettings();
+	fColorPickerView->SaveSettings(
+		static_cast<ColorsApplication*>(be_app)->Settings());
 	fColorWellsView->SaveSettings();
 
 	BMessage* settings = static_cast<ColorsApplication*>(be_app)->Settings();
