@@ -61,11 +61,13 @@ ColorsApplication::ReadyToRun()
 void
 ColorsApplication::AboutRequested()
 {
-	(new BAlert("About", "Colors! 2.1\n\n"
-		"©2001-2008 Werner Freytag\n"
+	(new BAlert("About", "Colors! 2.2\n\n"
 		"©2009-2012 Haiku, Inc.\n"
+		"©2001-2008 Werner Freytag\n"
 		"Colors! icon by meanwhile\n\n"
 		"History\n"
+		"    2.2 (Dec 1, 2012) Added web-safe selector control. Degree and % "
+		"symbols return.\n" 
 		"    2.1 (Aug 29, 2012) Updated look of controls, slider now updates "
 		"live.\n"
 		"    2.0 (Apr 30, 2012) Layout with the Haiku layout APIs, update "
