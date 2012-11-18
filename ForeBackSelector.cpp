@@ -84,19 +84,24 @@ void
 ForeBackSelector::DrawAfterChildren(BRect updateRect)
 {
 	rgb_color border = (rgb_color){ 184, 184, 184 };
+	rgb_color white = (rgb_color){ 255, 255, 255 };
 
 	// draw the background color rect
 	SetHighColor(border);
 	StrokeRect(COLOR_RECT_BACK);
+	SetHighColor(white);
+	StrokeRect(COLOR_RECT_BACK.InsetByCopy(1.0, 1.0));
 	SetHighColor(fBackColorWell->GetColor());
-	FillRect(COLOR_RECT_BACK.InsetByCopy(1.0, 1.0));
+	FillRect(COLOR_RECT_BACK.InsetByCopy(2.0, 2.0));
 
 	// draw the foreground color rect
 	SetDrawingMode(B_OP_OVER);
 	SetHighColor(border);
 	StrokeRect(COLOR_RECT_FORE);
+	SetHighColor(white);
+	StrokeRect(COLOR_RECT_FORE.InsetByCopy(1.0, 1.0));
 	SetHighColor(fForeColorWell->GetColor());
-	FillRect(COLOR_RECT_FORE.InsetByCopy(1.0, 1.0));
+	FillRect(COLOR_RECT_FORE.InsetByCopy(2.0, 2.0));
 	SetDrawingMode(B_OP_COPY);
 }
 

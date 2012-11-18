@@ -43,11 +43,15 @@ void
 ColorWell::Draw(BRect updateRect)
 {
 	rgb_color border = (rgb_color){ 184, 184, 184 };
+	rgb_color white = (rgb_color){ 255, 255, 255 };
+
 	SetHighColor(border);
 	StrokeRect(Bounds());
+	SetHighColor(white);
+	StrokeRect(Bounds().InsetByCopy(1.0, 1.0));
 
 	SetHighColor(fColor);
-	FillRect(Bounds().InsetByCopy(1.0, 1.0));
+	FillRect(Bounds().InsetByCopy(2.0, 2.0));
 }
 
 
