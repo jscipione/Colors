@@ -122,9 +122,9 @@ ForeBackSelector::MessageReceived(BMessage *message)
 	GetMouse(&where, &buttons);
 
 	if (COLOR_RECT_FORE.Contains(where))
-		fForeColorWell->MessageReceived(message);
+		Window()->PostMessage(message, fForeColorWell);
 	else if (COLOR_RECT_BACK.Contains(where))
-		fBackColorWell->MessageReceived(message);
+		Window()->PostMessage(message, fBackColorWell);
 
 	DrawAfterChildren(Bounds());
 }
