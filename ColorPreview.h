@@ -23,7 +23,7 @@ class ColorPreview : public BControl {
 
 		virtual	void				Draw(BRect updateRect);
 		virtual	status_t			Invoke(BMessage* message = NULL);
-		virtual	void				MessageReceived(BMessage *message);
+		virtual	void				MessageReceived(BMessage* message);
 		virtual	void				MouseDown(BPoint where);
 		virtual	void				MouseMoved(BPoint where, uint32 code,
 										const BMessage* message);

@@ -102,7 +102,7 @@ ColorPreview::Invoke(BMessage *message)
 
 
 void
-ColorPreview::MessageReceived(BMessage *message)
+ColorPreview::MessageReceived(BMessage* message)
 {
 	if (message->what == MSG_MESSAGERUNNER) {
 		BPoint where;
@@ -111,7 +111,7 @@ ColorPreview::MessageReceived(BMessage *message)
 
 		_DragColor(where);
 	} else {
-		char *nameFound;
+		char* nameFound;
 		type_code typeFound;
 		if (message->GetInfo(B_RGB_COLOR_TYPE, 0, &nameFound, &typeFound)
 				!= B_OK) {
