@@ -1,6 +1,8 @@
 Introduction
 Colors! is a color selector similar to that of Adobe Photoshop.
 
+![Screenshot](https://raw.github.com/jscipione/Colors/master/Colors\!.png)
+
 License
 As of 2009-03-27 Colors! has been relicensed MIT with the permission of the original author, Werner Freytag.
 
