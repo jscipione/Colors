@@ -12,14 +12,15 @@
 
 #include "ColorContainer.h"
 
+#include <iostream>
+#include <stdio.h>
+
 #include <Application.h>
 #include <Bitmap.h>
-#include <iostream>
 #include <MessageRunner.h>
 #include <Resources.h>
-#include <stdio.h>
+#include <Size.h>
 #include <String.h>
-#include <stdio.h>
 #include <Window.h>
 
 
@@ -31,6 +32,8 @@ ColorContainer::ColorContainer(BRect frame)
 	fMessageRunner(0),
 	fGotFirstClick(false)
 {
+	SetExplicitMinSize(BSize(frame.Width(), frame.Height()));
+	SetExplicitMaxSize(BSize(frame.Width(), frame.Height()));
 }
 
 
