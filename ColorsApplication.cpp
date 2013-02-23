@@ -61,11 +61,13 @@ ColorsApplication::ReadyToRun()
 void
 ColorsApplication::AboutRequested()
 {
-	(new BAlert("About", "Colors! 2.2\n\n"
-		"©2009-2012 Haiku, Inc.\n"
+	(new BAlert("About", "Colors! 2.3\n\n"
+		"©2009-2013 John Scipione.\n"
 		"©2001-2008 Werner Freytag\n"
 		"Colors! icon by meanwhile\n\n"
 		"History\n"
+		"    2.3 (Feb 23, 2013) Remove the ForeBackSelector control and "
+		"replace it with more color containers.\n"
 		"    2.2 (Dec 1, 2012) Added web-safe selector control. Degree and % "
 		"symbols return.\n" 
 		"    2.1 (Aug 29, 2012) Updated look of controls, slider now updates "

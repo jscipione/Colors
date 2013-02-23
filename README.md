@@ -15,6 +15,7 @@ All graphics, especially the icon or brands are copyrighted by the author and ma
 Find a color with Colors! When you have found the one you want, use drag & drop to copy it to your preferred application.
 
 # Version History
+* 2.3 (Feb 23, 2013) Remove the ForeBackSelector control and replace it with more color containers.
 * 2.2 (Dec 1, 2012) Added web-safe selector control. Degree and % symbols return.
 * 2.1 (Aug 29, 2012) Updated look of controls, slider now updates live.
 * 2.0 (Apr 30, 2012) Layout with the Haiku layout APIs, update the icon, add more color containers, update the interface, improve the fore back color container control.
