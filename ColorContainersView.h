@@ -10,11 +10,10 @@
 #include <View.h>
 
 
-static const int32 kColorContainerCount  = 32;
+static const int32 kColorContainerCount  = 40;
 
 
 class ColorContainer;
-class ForeBackSelector;
 
 class ColorContainersView : public BView {
 	public:
@@ -35,7 +34,6 @@ class ColorContainersView : public BView {
 				BPoint				fMouseOffset;
 
 				ColorContainer*		fColorContainer[kColorContainerCount];
-				ForeBackSelector*	fForeBackSelector;
 };
 
 
