@@ -11,29 +11,31 @@
 
 
 class BMessageRunner;
-class ColorWell;
+class ColorContainer;
 
 class ForeBackSelector : public BView {
-	public:
+public:
 									ForeBackSelector(BRect frame);
-		virtual						~ForeBackSelector();
+	virtual							~ForeBackSelector();
 
-		virtual	void				Draw(BRect updateRect);
-		virtual	void				DrawAfterChildren(BRect updateRect);
+	virtual	void					Draw(BRect updateRect);
+	virtual	void					DrawAfterChildren(BRect updateRect);
 
-		virtual	void				MessageReceived(BMessage *message);
+	virtual	void					MessageReceived(BMessage *message);
 
-		virtual	void				MouseDown(BPoint where);
-		virtual	void				MouseMoved(BPoint where, uint32 code,
+	virtual	void					MouseDown(BPoint where);
+	virtual	void					MouseMoved(BPoint where, uint32 code,
 										const BMessage* message);
-		virtual	void				MouseUp(BPoint where);
+	virtual	void					MouseUp(BPoint where);
 
-				ColorWell*			ForeColorWell() { return fForeColorWell; };
-				ColorWell*			BackColorWell() { return fBackColorWell; };
+			ColorContainer*			ForeColorContainer() const
+										{ return fForeColorContainer; };
+			ColorContainer*			BackColorContainer() const
+										{ return fBackColorContainer; };
 
 	private:
-				ColorWell*			fForeColorWell;
-				ColorWell*			fBackColorWell;
+			ColorContainer*			fForeColorContainer;
+			ColorContainer*			fBackColorContainer;
 };
 
 

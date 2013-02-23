@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Haiku, Inc. All Rights Reserved.
+ * Copyright 2009-2013 Haiku, Inc. All Rights Reserved.
  * Copyright 2001-2008 Werner Freytag.
  * Distributed under the terms of the MIT License.
  */
@@ -13,19 +13,19 @@
 #define	MSG_AUTOBORDERLESS	'AutB'
 
 
+class ColorContainersView;
 class ColorPickerView;
-class ColorWellsView;
 
 class ColorsWindow : public BWindow {
 public:
 									ColorsWindow(BRect frame);
-		virtual						~ColorsWindow();
+	virtual							~ColorsWindow();
 
-		virtual	void				MessageReceived(BMessage *message);
+	virtual	void					MessageReceived(BMessage* message);
 
 private:
-				ColorPickerView*	fColorPickerView;
-				ColorWellsView*		fColorWellsView;
+			ColorPickerView*		fColorPickerView;
+			ColorContainersView*	fColorContainersView;
 };
 
 

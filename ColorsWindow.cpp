@@ -21,7 +21,7 @@
 
 #include "ColorsApplication.h"
 #include "ColorPickerView.h"
-#include "ColorWellsView.h"
+#include "ColorContainersView.h"
 
 
 ColorsWindow::ColorsWindow(BRect frame)
@@ -30,12 +30,12 @@ ColorsWindow::ColorsWindow(BRect frame)
 		B_QUIT_ON_WINDOW_CLOSE | B_ASYNCHRONOUS_CONTROLS
 		| B_NOT_RESIZABLE | B_NOT_ZOOMABLE | B_AUTO_UPDATE_SIZE_LIMITS),
 	fColorPickerView(new ColorPickerView()),
-	fColorWellsView(new ColorWellsView())
+	fColorContainersView(new ColorContainersView())
 {
 	SetLayout(new BGroupLayout(B_VERTICAL, 0));
 
 	GetLayout()->AddView(fColorPickerView);
-	GetLayout()->AddView(fColorWellsView);
+	GetLayout()->AddView(fColorContainersView);
 
 	BMessage* settings = static_cast<ColorsApplication*>(be_app)->Settings();
 
@@ -71,7 +71,7 @@ ColorsWindow::ColorsWindow(BRect frame)
 ColorsWindow::~ColorsWindow()
 {
 	fColorPickerView->SaveSettings();
-	fColorWellsView->SaveSettings();
+	fColorContainersView->SaveSettings();
 
 	BMessage* settings = static_cast<ColorsApplication*>(be_app)->Settings();
 

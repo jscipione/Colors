@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Haiku, Inc. All Rights Reserved.
+ * Copyright 2009-2013 Haiku, Inc. All Rights Reserved.
  * Copyright 2001-2008 Werner Freytag.
  * Distributed under the terms of the MIT License.
  *
@@ -10,7 +10,7 @@
  */
 
 
-#include "ColorWell.h"
+#include "ColorContainer.h"
 
 #include <Application.h>
 #include <Bitmap.h>
@@ -23,9 +23,9 @@
 #include <Window.h>
 
 
-ColorWell::ColorWell(BRect frame)
+ColorContainer::ColorContainer(BRect frame)
 	:
-	BView(frame, "ColorWell", B_FOLLOW_TOP | B_FOLLOW_LEFT, B_WILL_DRAW),
+	BView(frame, "ColorContainer", B_FOLLOW_TOP | B_FOLLOW_LEFT, B_WILL_DRAW),
 	fMouseDown(false),
 	fMouseOffset(BPoint(0, 0)),
 	fMessageRunner(0),
@@ -34,13 +34,13 @@ ColorWell::ColorWell(BRect frame)
 }
 
 
-ColorWell::~ColorWell()
+ColorContainer::~ColorContainer()
 {
 }
 
 
 void
-ColorWell::Draw(BRect updateRect)
+ColorContainer::Draw(BRect updateRect)
 {
 	rgb_color border = (rgb_color){ 184, 184, 184 };
 	rgb_color white = (rgb_color){ 255, 255, 255 };
@@ -56,7 +56,7 @@ ColorWell::Draw(BRect updateRect)
 
 
 void
-ColorWell::MessageReceived(BMessage* message)
+ColorContainer::MessageReceived(BMessage* message)
 {
 	if (message->what == MSG_MESSAGERUNNER) {
 		BPoint where;
@@ -83,7 +83,7 @@ ColorWell::MessageReceived(BMessage* message)
 
 
 void
-ColorWell::MouseDown(BPoint where)
+ColorContainer::MouseDown(BPoint where)
 {
 	Window()->Activate();
 
@@ -114,7 +114,7 @@ ColorWell::MouseDown(BPoint where)
 
 
 void
-ColorWell::MouseMoved(BPoint where, uint32 code, const BMessage* message)
+ColorContainer::MouseMoved(BPoint where, uint32 code, const BMessage* message)
 {
 	if (fMouseDown)
 		DragColor(where);
@@ -122,7 +122,7 @@ ColorWell::MouseMoved(BPoint where, uint32 code, const BMessage* message)
 
 
 void
-ColorWell::MouseUp(BPoint where)
+ColorContainer::MouseUp(BPoint where)
 {
 	delete fMessageRunner;
 	fMessageRunner = 0;
@@ -133,14 +133,14 @@ ColorWell::MouseUp(BPoint where)
 
 
 rgb_color
-ColorWell::GetColor() const
+ColorContainer::GetColor() const
 {
 	return fColor;
 }
 
 
 void
-ColorWell::SetColor(long int c)
+ColorContainer::SetColor(long int c)
 {
 	rgb_color color;
 	color.red   = (c >> 16) & 255;
@@ -151,7 +151,7 @@ ColorWell::SetColor(long int c)
 
 
 void
-ColorWell::SetColor(rgb_color color)
+ColorContainer::SetColor(rgb_color color)
 {
 	color.alpha = 255;
 	fColor = color;
@@ -164,7 +164,7 @@ ColorWell::SetColor(rgb_color color)
 
 
 void
-ColorWell::DragColor(BPoint where)
+ColorContainer::DragColor(BPoint where)
 {
 	fGotFirstClick = false;
 

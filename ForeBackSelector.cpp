@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Haiku, Inc. All Rights Reserved.
+ * Copyright 2009-2013 Haiku, Inc. All Rights Reserved.
  * Copyright 2001-2008 Werner Freytag.
  * Distributed under the terms of the MIT License.
  *
@@ -16,7 +16,7 @@
 #include <Rect.h>
 #include <Window.h>
 
-#include "ColorWell.h"
+#include "ColorContainer.h"
 
 #define COLOR_RECT_FORE BRect(0.0, 0.0, 27.0, 27.0)
 #define COLOR_RECT_BACK BRect(0.0, 0.0, 27.0, 27.0).OffsetToCopy(13.0, 13.0)
@@ -34,10 +34,10 @@ ForeBackSelector::ForeBackSelector(BRect frame)
 {
 	SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 
-	fForeColorWell = new ColorWell(COLOR_RECT_FORE);
-	AddChild(fForeColorWell);
-	fBackColorWell = new ColorWell(COLOR_RECT_FORE);
-	AddChild(fBackColorWell);
+	fForeColorContainer = new ColorContainer(COLOR_RECT_FORE);
+	AddChild(fForeColorContainer);
+	fBackColorContainer = new ColorContainer(COLOR_RECT_FORE);
+	AddChild(fBackColorContainer);
 }
 
 
@@ -91,7 +91,7 @@ ForeBackSelector::DrawAfterChildren(BRect updateRect)
 	StrokeRect(COLOR_RECT_BACK);
 	SetHighColor(white);
 	StrokeRect(COLOR_RECT_BACK.InsetByCopy(1.0, 1.0));
-	SetHighColor(fBackColorWell->GetColor());
+	SetHighColor(fBackColorContainer->GetColor());
 	FillRect(COLOR_RECT_BACK.InsetByCopy(2.0, 2.0));
 
 	// draw the foreground color rect
@@ -100,7 +100,7 @@ ForeBackSelector::DrawAfterChildren(BRect updateRect)
 	StrokeRect(COLOR_RECT_FORE);
 	SetHighColor(white);
 	StrokeRect(COLOR_RECT_FORE.InsetByCopy(1.0, 1.0));
-	SetHighColor(fForeColorWell->GetColor());
+	SetHighColor(fForeColorContainer->GetColor());
 	FillRect(COLOR_RECT_FORE.InsetByCopy(2.0, 2.0));
 	SetDrawingMode(B_OP_COPY);
 }
@@ -122,9 +122,9 @@ ForeBackSelector::MessageReceived(BMessage *message)
 	GetMouse(&where, &buttons);
 
 	if (COLOR_RECT_FORE.Contains(where))
-		Window()->PostMessage(message, fForeColorWell);
+		Window()->PostMessage(message, fForeColorContainer);
 	else if (COLOR_RECT_BACK.Contains(where))
-		Window()->PostMessage(message, fBackColorWell);
+		Window()->PostMessage(message, fBackColorContainer);
 
 	DrawAfterChildren(Bounds());
 }
@@ -136,21 +136,21 @@ ForeBackSelector::MouseDown(BPoint where)
 	Window()->Activate();
 
 	if ((DEFAULT_RECT_FORE | DEFAULT_RECT_BACK).Contains(where)) {
-		fForeColorWell->SetColor(0x000000);
-		fBackColorWell->SetColor(0xffffff);
+		fForeColorContainer->SetColor(0x000000);
+		fBackColorContainer->SetColor(0xffffff);
 		DrawAfterChildren(Bounds());
 		BView::MouseDown(where);
 	} else if (SWITCHER_RECT.Contains(where)) {
-		rgb_color foreColor = fForeColorWell->GetColor();
-		rgb_color backColor = fBackColorWell->GetColor();
-		fForeColorWell->SetColor(backColor);
-		fBackColorWell->SetColor(foreColor);
+		rgb_color foreColor = fForeColorContainer->GetColor();
+		rgb_color backColor = fBackColorContainer->GetColor();
+		fForeColorContainer->SetColor(backColor);
+		fBackColorContainer->SetColor(foreColor);
 		DrawAfterChildren(Bounds());
 		BView::MouseDown(where);
 	} else if (COLOR_RECT_FORE.Contains(where))
-		fForeColorWell->MouseDown(where);
+		fForeColorContainer->MouseDown(where);
 	else if (COLOR_RECT_BACK.Contains(where))
-		fBackColorWell->MouseDown(where);
+		fBackColorContainer->MouseDown(where);
 	else
 		BView::MouseDown(where);
 }
@@ -160,9 +160,9 @@ void
 ForeBackSelector::MouseMoved(BPoint where, uint32 code, const BMessage* message)
 {
 	if (COLOR_RECT_FORE.Contains(where))
-		fForeColorWell->MouseMoved(where, code, message);
+		fForeColorContainer->MouseMoved(where, code, message);
 	else if (COLOR_RECT_BACK.Contains(where))
-		fBackColorWell->MouseMoved(where, code, message);
+		fBackColorContainer->MouseMoved(where, code, message);
 	else
 		BView::MouseMoved(where, code, message);
 }
@@ -172,9 +172,9 @@ void
 ForeBackSelector::MouseUp(BPoint where)
 {
 	if (COLOR_RECT_FORE.Contains(where))
-		fForeColorWell->MouseUp(where);
+		fForeColorContainer->MouseUp(where);
 	else if (COLOR_RECT_BACK.Contains(where))
-		fBackColorWell->MouseUp(where);
+		fBackColorContainer->MouseUp(where);
 	else
 		BView::MouseUp(where);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Haiku, Inc. All Rights Reserved.
+ * Copyright 2009-2013 Haiku, Inc. All Rights Reserved.
  * Copyright 2001-2008 Werner Freytag.
  * Distributed under the terms of the MIT License.
  *
@@ -10,7 +10,7 @@
  */
 
 
-#include "ColorWellsView.h"
+#include "ColorContainersView.h"
 
 #include <iostream>
 
@@ -23,60 +23,60 @@
 #include <Window.h>
 
 #include "ColorsApplication.h"
-#include "ColorWell.h"
+#include "ColorContainer.h"
 #include "ColorsWindow.h"
 #include "ForeBackSelector.h"
 
 #define COLOR_TO_INT(c) (c.red << 16) + (c.green << 8) + (c.blue)
 
 
-ColorWellsView::ColorWellsView()
+ColorContainersView::ColorContainersView()
 	:
 	BView("containers view", B_WILL_DRAW),
 	fMouseDown(false)
 {
 	SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 
-	for (int32 i = 0; i < kColorWellCount; ++i)
-		fColorWell[i] = new ColorWell(BRect(0.0, 0.0, 19.0, 19.0));
+	for (int32 i = 0; i < kColorContainerCount; ++i)
+		fColorContainer[i] = new ColorContainer(BRect(0.0, 0.0, 19.0, 19.0));
 
 	fForeBackSelector = new ForeBackSelector(BRect(0.0, 0.0, 40.0, 40.0));
 
 	BLayoutBuilder::Group<>(this)
 		.AddGroup(B_HORIZONTAL, 24.0)
 			.AddGrid(1, 1)
-				.Add(fColorWell[0], 0, 0)
-				.Add(fColorWell[1], 1, 0)
-				.Add(fColorWell[2], 2, 0)
-				.Add(fColorWell[3], 3, 0)
-				.Add(fColorWell[4], 4, 0)
-				.Add(fColorWell[5], 5, 0)
-				.Add(fColorWell[6], 6, 0)
-				.Add(fColorWell[7], 7, 0)
-				.Add(fColorWell[8], 8, 0)
-				.Add(fColorWell[9], 9, 0)
-				.Add(fColorWell[10], 10, 0)
-				.Add(fColorWell[11], 11, 0)
-				.Add(fColorWell[12], 12, 0)
-				.Add(fColorWell[13], 13, 0)
-				.Add(fColorWell[14], 14, 0)
-				.Add(fColorWell[15], 15, 0)
-				.Add(fColorWell[16], 0, 1)
-				.Add(fColorWell[17], 1, 1)
-				.Add(fColorWell[18], 2, 1)
-				.Add(fColorWell[19], 3, 1)
-				.Add(fColorWell[20], 4, 1)
-				.Add(fColorWell[21], 5, 1)
-				.Add(fColorWell[22], 6, 1)
-				.Add(fColorWell[23], 7, 1)
-				.Add(fColorWell[24], 8, 1)
-				.Add(fColorWell[25], 9, 1)
-				.Add(fColorWell[26], 10, 1)
-				.Add(fColorWell[27], 11, 1)
-				.Add(fColorWell[28], 12, 1)
-				.Add(fColorWell[29], 13, 1)
-				.Add(fColorWell[30], 14, 1)
-				.Add(fColorWell[31], 15, 1)
+				.Add(fColorContainer[0], 0, 0)
+				.Add(fColorContainer[1], 1, 0)
+				.Add(fColorContainer[2], 2, 0)
+				.Add(fColorContainer[3], 3, 0)
+				.Add(fColorContainer[4], 4, 0)
+				.Add(fColorContainer[5], 5, 0)
+				.Add(fColorContainer[6], 6, 0)
+				.Add(fColorContainer[7], 7, 0)
+				.Add(fColorContainer[8], 8, 0)
+				.Add(fColorContainer[9], 9, 0)
+				.Add(fColorContainer[10], 10, 0)
+				.Add(fColorContainer[11], 11, 0)
+				.Add(fColorContainer[12], 12, 0)
+				.Add(fColorContainer[13], 13, 0)
+				.Add(fColorContainer[14], 14, 0)
+				.Add(fColorContainer[15], 15, 0)
+				.Add(fColorContainer[16], 0, 1)
+				.Add(fColorContainer[17], 1, 1)
+				.Add(fColorContainer[18], 2, 1)
+				.Add(fColorContainer[19], 3, 1)
+				.Add(fColorContainer[20], 4, 1)
+				.Add(fColorContainer[21], 5, 1)
+				.Add(fColorContainer[22], 6, 1)
+				.Add(fColorContainer[23], 7, 1)
+				.Add(fColorContainer[24], 8, 1)
+				.Add(fColorContainer[25], 9, 1)
+				.Add(fColorContainer[26], 10, 1)
+				.Add(fColorContainer[27], 11, 1)
+				.Add(fColorContainer[28], 12, 1)
+				.Add(fColorContainer[29], 13, 1)
+				.Add(fColorContainer[30], 14, 1)
+				.Add(fColorContainer[31], 15, 1)
 				.End()
 			.Add(fForeBackSelector)
 			.SetInsets(B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING,
@@ -85,13 +85,13 @@ ColorWellsView::ColorWellsView()
 }
 
 
-ColorWellsView::~ColorWellsView()
+ColorContainersView::~ColorContainersView()
 {
 }
 
 
 void
-ColorWellsView::AttachedToWindow()
+ColorContainersView::AttachedToWindow()
 {
 	BView::AttachedToWindow();
 
@@ -100,27 +100,27 @@ ColorWellsView::AttachedToWindow()
 	for (int32 i = 0; i < 32; ++i) {
 		long int int_color;
 		if (settings->FindInt32("color_well", i, &int_color) == B_OK)
-			fColorWell[i]->SetColor(int_color);
+			fColorContainer[i]->SetColor(int_color);
 		else
-			fColorWell[i]->SetColor(0xffffff);
+			fColorContainer[i]->SetColor(0xffffff);
 	}
 
 	long int foreground_color;
 	if (settings->FindInt32("foreground", &foreground_color) != B_OK)
 		foreground_color = 0x000000;
 
-	fForeBackSelector->ForeColorWell()->SetColor(foreground_color);
+	fForeBackSelector->ForeColorContainer()->SetColor(foreground_color);
 
 	long int background_color;
 	if (settings->FindInt32("background", &background_color) != B_OK)
 		background_color = 0xffffff;
 
-	fForeBackSelector->BackColorWell()->SetColor(background_color);
+	fForeBackSelector->BackColorContainer()->SetColor(background_color);
 }
 
 
 void
-ColorWellsView::Draw(BRect updateRect)
+ColorContainersView::Draw(BRect updateRect)
 {
 	BView::Draw(updateRect);
 
@@ -136,7 +136,7 @@ ColorWellsView::Draw(BRect updateRect)
 
 
 void
-ColorWellsView::MouseDown(BPoint where)
+ColorContainersView::MouseDown(BPoint where)
 {
 	Window()->Activate();
 
@@ -162,7 +162,7 @@ ColorWellsView::MouseDown(BPoint where)
 
 
 void
-ColorWellsView::MouseMoved(BPoint where, uint32 code, const BMessage *message)
+ColorContainersView::MouseMoved(BPoint where, uint32 code, const BMessage *message)
 {
 	if (fMouseDown) {
 		BPoint win_pos = Window()->Frame().LeftTop();
@@ -174,7 +174,7 @@ ColorWellsView::MouseMoved(BPoint where, uint32 code, const BMessage *message)
 
 
 void
-ColorWellsView::MouseUp(BPoint where)
+ColorContainersView::MouseUp(BPoint where)
 {
 	fMouseDown = false;
 
@@ -183,21 +183,21 @@ ColorWellsView::MouseUp(BPoint where)
 
 
 void
-ColorWellsView::SaveSettings()
+ColorContainersView::SaveSettings()
 {
 	BMessage* settings = static_cast<ColorsApplication*>(be_app)->Settings();
 
 	settings->RemoveName("color_well");
-	for (int32 i = 0; i < kColorWellCount; ++i) {
+	for (int32 i = 0; i < kColorContainerCount; ++i) {
 		settings->AddInt32("color_well",
-			COLOR_TO_INT(fColorWell[i]->GetColor()));
+			COLOR_TO_INT(fColorContainer[i]->GetColor()));
 	}
 
 	settings->RemoveName("foreground");
 	settings->AddInt32("foreground",
-		COLOR_TO_INT(fForeBackSelector->ForeColorWell()->GetColor()));
+		COLOR_TO_INT(fForeBackSelector->ForeColorContainer()->GetColor()));
 
 	settings->RemoveName("background");
 	settings->AddInt32("background",
-		COLOR_TO_INT(fForeBackSelector->BackColorWell()->GetColor()));
+		COLOR_TO_INT(fForeBackSelector->BackColorContainer()->GetColor()));
 }

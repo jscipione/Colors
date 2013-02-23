@@ -1,10 +1,10 @@
 /*
- * Copyright 2009-2012 Haiku, Inc. All Rights Reserved.
+ * Copyright 2009-2013 Haiku, Inc. All Rights Reserved.
  * Copyright 2001-2008 Werner Freytag.
  * Distributed under the terms of the MIT License.
  */
-#ifndef _COLOR_WELL_H
-#define _COLOR_WELL_H
+#ifndef _COLOR_CONTAINER_H
+#define _COLOR_CONTAINER_H
 
 
 #include <View.h>
@@ -14,10 +14,10 @@
 
 class BMessageRunner;
 
-class ColorWell : public BView {
+class ColorContainer : public BView {
 	public:
-									ColorWell(BRect frame);
-		virtual						~ColorWell();
+									ColorContainer(BRect frame);
+		virtual						~ColorContainer();
 
 		virtual	void				Draw(BRect updateRect);
 
@@ -43,4 +43,4 @@ class ColorWell : public BView {
 };
 
 
-#endif	// _COLOR_WELL_H
+#endif	// _COLOR_CONTAINER_H

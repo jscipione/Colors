@@ -1,24 +1,25 @@
 /*
- * Copyright 2009-2012 Haiku, Inc. All Rights Reserved.
+ * Copyright 2009-2013 Haiku, Inc. All Rights Reserved.
  * Copyright 2001-2008 Werner Freytag.
  * Distributed under the terms of the MIT License.
  */
-#ifndef _COLOR_WELLS_VIEW_H
-#define _COLOR_WELLS_VIEW_H
+#ifndef _COLOR_CONTAINERS_VIEW_H
+#define _COLOR_CONTAINERS_VIEW_H
 
 
 #include <View.h>
 
 
-static const int32 kColorWellCount  = 32;
+static const int32 kColorContainerCount  = 32;
 
-class ColorWell;
+
+class ColorContainer;
 class ForeBackSelector;
 
-class ColorWellsView : public BView {
+class ColorContainersView : public BView {
 	public:
-									ColorWellsView();
-		virtual						~ColorWellsView();
+									ColorContainersView();
+		virtual						~ColorContainersView();
 
 		virtual	void				AttachedToWindow();
 		virtual	void				Draw(BRect updateRect);
@@ -33,9 +34,9 @@ class ColorWellsView : public BView {
 				bool				fMouseDown;
 				BPoint				fMouseOffset;
 
-				ColorWell*			fColorWell[kColorWellCount];
+				ColorContainer*		fColorContainer[kColorContainerCount];
 				ForeBackSelector*	fForeBackSelector;
 };
 
 
-#endif	// _COLOR_WELLS_VIEW_H
+#endif	// _COLOR_CONTAINERS_VIEW_H
