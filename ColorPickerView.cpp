@@ -27,6 +27,7 @@
 #include <Resources.h>
 #include <Screen.h>
 #include <Size.h>
+#include <SpaceLayoutItem.h>
 #include <StringView.h>
 #include <TextControl.h>
 #include <Window.h>
@@ -88,7 +89,10 @@ ColorPickerView::ColorPickerView()
 	for (int32 i = 0; i < 6; ++i) {
 		fRadioButton[i] = new BRadioButton(NULL, title[i],
 			new BMessage(MSG_RADIOBUTTON + i));
-		fRadioButton[i]->SetExplicitMinSize(BSize(32.0, 19.0));
+		fRadioButton[i]->SetExplicitMinSize(BSize(39.0f, B_SIZE_UNSET));
+		fRadioButton[i]->SetExplicitMaxSize(BSize(39.0f, B_SIZE_UNSET));
+		fRadioButton[i]->SetExplicitAlignment(BAlignment(B_ALIGN_LEFT,
+			B_ALIGN_VERTICAL_CENTER));
 
 		fTextControl[i] = new BTextControl(NULL, NULL, NULL,
 			new BMessage(MSG_TEXTCONTROL + i));
@@ -129,53 +133,43 @@ ColorPickerView::ColorPickerView()
 	fHexTextControl = new BTextControl(NULL, "#", NULL,
 		new BMessage(MSG_HEXTEXTCONTROL));
 
-	BStringView* spacer = new BStringView("spacer", "");
-
-	BLayoutBuilder::Group<>(this)
-		.AddGroup(B_HORIZONTAL, B_USE_SMALL_SPACING)
-			.Add(fColorField)
-			.Add(fColorSlider)
-			.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)
-				.AddGroup(B_HORIZONTAL, B_USE_SMALL_SPACING)
-					.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)
-						.Add(fOutOfGamutSelector)
-						.Add(fWebSafeSelector)
-					.End()
-					.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)
-						.Add(fColorPreview)
-						.Add(fEyeDropper)
-						.SetInsets(0, 0, B_USE_DEFAULT_SPACING, 0)
-						.End()
-					.End()
-				.AddGrid(1, 1)
-					.Add(fRadioButton[0], 0, 0)
-					.Add(fTextControl[0], 1, 0)
-					.Add(new BStringView("degree", "˚"), 2, 0)
-					.Add(fRadioButton[1], 0, 1)
-					.Add(fTextControl[1], 1, 1)
-					.Add(new BStringView("percent", "%"), 2, 1)
-					.Add(fRadioButton[2], 0, 2)
-					.Add(fTextControl[2], 1, 2)
-					.Add(new BStringView("percent", "%"), 2, 2)
-					.Add(fRadioButton[3], 0, 3)
-					.Add(fTextControl[3], 1, 3)
-					.Add(spacer, 2, 3)
-					.Add(fRadioButton[4], 0, 4)
-					.Add(fTextControl[4], 1, 4)
-					.Add(spacer, 2, 4)
-					.Add(fRadioButton[5], 0, 5)
-					.Add(fTextControl[5], 1, 5)
-					.Add(spacer, 2, 5)
-					.End()
-				.AddGroup(B_HORIZONTAL, B_USE_DEFAULT_SPACING)
-					.Add(fHexTextControl)
-					.Add(spacer)
-					.End()
-				.AddGlue()
+	BLayoutBuilder::Group<>(this, B_HORIZONTAL, B_USE_SMALL_SPACING)
+		.Add(fColorField)
+		.Add(fColorSlider)
+		.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)
+			.AddGroup(B_HORIZONTAL, 0.0f)
+				.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)
+					.Add(fOutOfGamutSelector)
+					.Add(fWebSafeSelector)
 				.End()
-			.SetInsets(B_USE_DEFAULT_SPACING, B_USE_DEFAULT_SPACING, 1,
-				B_USE_DEFAULT_SPACING)
-			.End();
+				.AddGroup(B_VERTICAL, B_USE_SMALL_SPACING)
+					.Add(fColorPreview)
+					.Add(fEyeDropper)
+					.End()
+				.SetInsets(0)
+				.End()
+			.AddGlue()
+			.AddGrid(0.0f, 0.0f)
+				.Add(fRadioButton[0], 0, 0)
+				.Add(fTextControl[0], 1, 0)
+				.Add(new BStringView("degree", "˚"), 2, 0)
+				.Add(fRadioButton[1], 0, 1)
+				.Add(fTextControl[1], 1, 1)
+				.Add(new BStringView("percent", "%"), 2, 1)
+				.Add(fRadioButton[2], 0, 2)
+				.Add(fTextControl[2], 1, 2)
+				.Add(new BStringView("percent", "%"), 2, 2)
+				.Add(fRadioButton[3], 0, 3)
+				.Add(fTextControl[3], 1, 3)
+				.Add(fRadioButton[4], 0, 4)
+				.Add(fTextControl[4], 1, 4)
+				.Add(fRadioButton[5], 0, 5)
+				.Add(fTextControl[5], 1, 5)
+				.End()
+			.Add(fHexTextControl)
+			.End()
+		.SetInsets(B_USE_DEFAULT_SPACING)
+		.End();
 }
 
 
@@ -213,14 +207,16 @@ ColorPickerView::AttachedToWindow()
 	fEyeDropper->SetTarget(this);
 
 	for (int32 i = 0; i < 6; ++i) {
-		fRadioButton[i]->SetFontSize(9.0);
+		fRadioButton[i]->SetFontSize(9.0f);
 		fRadioButton[i]->SetTarget(this);
-
-		fTextControl[i]->SetDivider(12.0);
 		fTextControl[i]->SetTarget(this);
 
+		BTextView* textView = fTextControl[i]->TextView();
+		textView->SetExplicitAlignment(BAlignment(B_ALIGN_LEFT,
+			B_ALIGN_VERTICAL_CENTER));
+		float textWidth = textView->StringWidth("99999");
+		textView->SetExplicitMaxSize(BSize(textWidth, B_SIZE_UNSET));
 		// Only permit (max 3) decimal inputs
-		BTextView *textView = fTextControl[i]->TextView();
 		textView->SetMaxBytes(3);
 		for (int32 j = 32; j < 255; ++j) {
 			if (j < '0' || j > '9')
@@ -228,11 +224,14 @@ ColorPickerView::AttachedToWindow()
 		}
 	}
 
-	fHexTextControl->SetDivider(12.0);
 	fHexTextControl->SetTarget(this);
 
+	BTextView* hexTextView = fHexTextControl->TextView();
+	float hexTextWidth = hexTextView->StringWidth("99999999");
+	hexTextView->SetExplicitMaxSize(BSize(hexTextWidth, B_SIZE_UNSET));
+	hexTextView->SetExplicitAlignment(BAlignment(B_ALIGN_LEFT,
+			B_ALIGN_VERTICAL_CENTER));
 	// Only permit (max 6) hexidecimal inputs
-	BTextView *hexTextView = fHexTextControl->TextView();
 	hexTextView->SetMaxBytes(6);
 	for (int32 j = 32; j < 255; ++j) {
 		if (!((j >= '0' && j <= '9') || (j >= 'a' && j <= 'f')
