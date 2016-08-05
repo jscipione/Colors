@@ -13,8 +13,9 @@
 
 #include "ColorPreview.h"
 
+#include <algorithm>
 #include <iostream>
-#include <stdio.h>
+
 #include <stdio.h>
 
 #include <Alignment.h>
@@ -217,7 +218,7 @@ ColorPreview::_DragColor(BPoint where)
 	message.AddData("text/plain", B_MIME_TYPE, &hexstr, sizeof(hexstr));
 	message.AddData("RGBColor", B_RGB_COLOR_TYPE, &fColor, sizeof(fColor));
 
-	BRect rect(0.0, 0.0, 20.0, 20.0);
+	BRect rect(0.0f, 0.0f, 20.0f, 20.0f);
 
 	BBitmap* bitmap = new BBitmap(rect, B_RGB32, true);
 	bitmap->Lock();
@@ -233,17 +234,18 @@ ColorPreview::_DragColor(BPoint where)
 
 	view->SetHighColor(0, 0, 0, 100);
 	view->FillRect(rect);
-	rect.OffsetBy(-1.0, -1.0);
+	rect.OffsetBy(-1.0f, -1.0f);
 
-	view->SetHighColor(min_c(255, 1.2 * fColor.red + 40),
-		min_c(255, 1.2 * fColor.green + 40),
-		min_c(255, 1.2 * fColor.blue + 40));
+	view->SetHighColor(std::min(255, (int)(1.2 * fColor.red + 40)),
+		std::min(255, (int)(1.2 * fColor.green + 40)),
+		std::min(255, (int)(1.2 * fColor.blue + 40)));
 	view->StrokeRect(rect);
 
 	++rect.left;
 	++rect.top;
 
-	view->SetHighColor(0.8 * fColor.red, 0.8 * fColor.green, 0.8 * fColor.blue);
+	view->SetHighColor((int32)(0.8 * fColor.red),
+		(int32)(0.8 * fColor.green), (int32)(0.8 * fColor.blue));
 	view->StrokeRect(rect);
 
 	--rect.right;
@@ -251,11 +253,11 @@ ColorPreview::_DragColor(BPoint where)
 
 	view->SetHighColor(fColor.red, fColor.green, fColor.blue);
 	view->FillRect(rect);
-	view->Flush();
+	view->Sync();
 
 	bitmap->Unlock();
 
-	DragMessage(&message, bitmap, B_OP_ALPHA, BPoint(14.0, 14.0));
+	DragMessage(&message, bitmap, B_OP_ALPHA, BPoint(14.0f, 14.0f));
 
 	MouseUp(where);
 }
