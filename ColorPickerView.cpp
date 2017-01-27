@@ -68,7 +68,7 @@ ColorPickerView::ColorPickerView()
 
 	BMessage* settings = static_cast<ColorsApplication*>(be_app)->Settings();
 
-	long int int_color;
+	int32 int_color;
 	if (settings->FindInt32("selected_color", &int_color) == B_OK) {
 		fRed = (float)(int_color >> 16) / 255;
 		fGreen = (float)((int_color >> 8) & 255) / 255;
