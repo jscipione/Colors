@@ -102,7 +102,7 @@ ColorContainersView::AttachedToWindow()
 	BMessage* settings = static_cast<ColorsApplication*>(be_app)->Settings();
 
 	for (int32 i = 0; i < kColorContainerCount; ++i) {
-		long int int_color;
+		int32 int_color;
 		if (settings->FindInt32("color_well", i, &int_color) == B_OK)
 			fColorContainer[i]->SetColor(int_color);
 		else
